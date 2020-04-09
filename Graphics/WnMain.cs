@@ -19,6 +19,7 @@ namespace WxInjector.Graphics
         public WnMain()
         {
             InitializeComponent();
+            Refresh(null, null);
         }
 
         [SuppressMessage("Design", "CA1031")]
@@ -95,25 +96,15 @@ namespace WxInjector.Graphics
 
         private void Remove(object Sender, EventArgs Arguments)
         {
+            TbDLL.Text = string.Empty;
             if (LbDLLs.SelectedItem != null)
                 LbDLLs.Items.Remove(LbDLLs.SelectedItem);
         }
 
         private void Clear(object Sender, EventArgs Arguments)
         {
+            TbDLL.Text = string.Empty;
             LbDLLs.Items.Clear();
-        }
-
-        private void Refresh(object Sender, EventArgs Arguments)
-        {
-            LbProcesses.Items.Clear();
-            var Processes = Process.GetProcesses();
-            foreach (var Process in Processes)
-            {
-                if (!string.IsNullOrEmpty(Process.MainWindowTitle))
-                    LbProcesses.Items.Add(new ProcessItem(Process.ProcessName + ".exe", Process.Id));
-                Process.Dispose();
-            }
         }
 
         private void Start(object Sender, EventArgs Arguments)
@@ -122,12 +113,10 @@ namespace WxInjector.Graphics
             if (User.DLLs != null)
                 foreach (var Item in User.DLLs)
                     LbDLLs.Items.Add(Item);
-            Refresher.Start();
         }
 
         private void Release(object Sender, FormClosingEventArgs Arguments)
         {
-            Refresher.Stop();
             if (LbDLLs.Items.Count != 0)
             {
                 var List = new List<string>();
@@ -159,6 +148,34 @@ namespace WxInjector.Graphics
         {
             if (Arguments.Data.GetDataPresent(DataFormats.FileDrop))
                 Arguments.Effect = DragDropEffects.Copy;
+        }
+
+        private void Refresh(object Sender, EventArgs Arguments)
+        {
+            TbProcess.Text = string.Empty;
+            LbProcesses.Items.Clear();
+            var Processes = Process.GetProcesses();
+            foreach (var Item in Processes)
+                if (!string.IsNullOrEmpty(Item.MainWindowTitle))
+                    LbProcesses.Items.Add(new ProcessItem(Item.ProcessName + ".exe", Item.Id));
+        }
+
+        private void ProcessesClick(object Sender, MouseEventArgs Arguments)
+        {
+            if (LbProcesses.SelectedItem != null)
+            {
+                var Item = LbProcesses.SelectedItem as ProcessItem;
+                TbProcess.Text = Item.Text;
+            }
+        }
+
+        private void DLLsClick(object Sender, MouseEventArgs Arguments)
+        {
+            if (LbDLLs.SelectedItem != null)
+            {
+                var Item = LbDLLs.SelectedItem;
+                TbDLL.Text = LbDLLs.GetItemText(Item);
+            }
         }
 
     }
