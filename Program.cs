@@ -5,10 +5,8 @@ using WxInjector.Graphics;
 
 namespace WxInjector
 {
-
     public static class Program
     {
-
         [STAThread]
         [SuppressMessage("Reliability", "CA2000")]
         public static void Main()
@@ -17,7 +15,5 @@ namespace WxInjector
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new WnMain());
         }
-
     }
-
 }

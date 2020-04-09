@@ -218,6 +218,7 @@
         private System.Windows.Forms.Button BnRefresh;
         private System.Windows.Forms.TextBox TbProcess;
         private System.Windows.Forms.TextBox TbDLL;
+
     }
 
 }

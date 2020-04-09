@@ -1,20 +1,18 @@
-﻿using WxInjector.Core;
-using WxInjector.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
+using WxInjector.Core;
+using WxInjector.Core.Models;
 
 namespace WxInjector.Graphics
 {
-
     [SuppressMessage("Globalization", "CA1303")]
     public partial class WnMain : Form
     {
-
-        private Records User = null;
+        private Records User;
 
         public WnMain()
         {
@@ -31,11 +29,13 @@ namespace WxInjector.Graphics
                 MessageBox.Show("Select a process or DLL first before injecting!", "WxInjector");
                 return;
             }
+
             if (Item.Process == -1)
             {
                 MessageBox.Show("This process can't be injected!", "WxInjector");
                 return;
             }
+
             var Result = Injector.Result.InjectionSuccessful;
             try
             {
@@ -47,6 +47,7 @@ namespace WxInjector.Graphics
             {
                 MessageBox.Show("An error has occurred! " + Error.Message, "WxInjector");
             }
+
             if (Result != Injector.Result.InjectionSuccessful)
             {
                 switch (Result)
@@ -73,8 +74,10 @@ namespace WxInjector.Graphics
                         MessageBox.Show("Unable to release memory!", "WxInjector");
                         break;
                 }
+
                 return;
             }
+
             MessageBox.Show("DLL successfully injected into process!", "WxInjector");
         }
 
@@ -129,6 +132,7 @@ namespace WxInjector.Graphics
                 var List = new List<string>();
                 User.DLLs = List.ToArray();
             }
+
             User.Save();
         }
 
@@ -177,7 +181,5 @@ namespace WxInjector.Graphics
                 TbDLL.Text = LbDLLs.GetItemText(Item);
             }
         }
-
     }
-
 }

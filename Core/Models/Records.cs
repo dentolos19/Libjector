@@ -4,11 +4,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WxInjector.Core.Models
 {
-
     [Serializable]
     internal class Records
     {
-
         public static readonly string Source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WxInjector.cfg");
         private static readonly BinaryFormatter Formatter = new BinaryFormatter();
 
@@ -30,9 +28,8 @@ namespace WxInjector.Core.Models
                 Result = Formatter.Deserialize(Stream) as Records;
                 Stream.Close();
             }
+
             return Result;
         }
-
     }
-
 }

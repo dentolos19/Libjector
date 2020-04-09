@@ -6,31 +6,11 @@ using System.Security;
 
 namespace WxInjector.Core
 {
-
     [SuppressMessage("Design", "CA1060")]
     [SuppressMessage("Globalization", "CA2101")]
     [SuppressMessage("Design", "CA1028")]
     internal static class Interop
     {
-
-        [Flags]
-        public enum ProcessAccessFlags : uint
-        {
-            All = 0x001F0FFF,
-            Terminate = 0x00000001,
-            CreateThread = 0x00000002,
-            VirtualMemoryOperation = 0x00000008,
-            VirtualMemoryRead = 0x00000010,
-            VirtualMemoryWrite = 0x00000020,
-            DuplicateHandle = 0x00000040,
-            CreateProcess = 0x000000080,
-            SetQuota = 0x00000100,
-            SetInformation = 0x00000200,
-            QueryInformation = 0x00000400,
-            QueryLimitedInformation = 0x00001000,
-            Synchronize = 0x00100000
-        }
-
         [Flags]
         public enum AllocationType
         {
@@ -61,6 +41,24 @@ namespace WxInjector.Core
             WriteCombineModifierflag = 0x400
         }
 
+        [Flags]
+        public enum ProcessAccessFlags : uint
+        {
+            All = 0x001F0FFF,
+            Terminate = 0x00000001,
+            CreateThread = 0x00000002,
+            VirtualMemoryOperation = 0x00000008,
+            VirtualMemoryRead = 0x00000010,
+            VirtualMemoryWrite = 0x00000020,
+            DuplicateHandle = 0x00000040,
+            CreateProcess = 0x000000080,
+            SetQuota = 0x00000100,
+            SetInformation = 0x00000200,
+            QueryInformation = 0x00000400,
+            QueryLimitedInformation = 0x00001000,
+            Synchronize = 0x00100000
+        }
+
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr OpenProcess(ProcessAccessFlags Access, bool Handle, int Process);
 
@@ -68,10 +66,12 @@ namespace WxInjector.Core
         public static extern bool VirtualFreeEx(IntPtr Process, IntPtr Address, int Size, AllocationType Type);
 
         [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr VirtualAllocEx(IntPtr Process, IntPtr Address, IntPtr Size, AllocationType Type, MemoryProtection Protection);
+        public static extern IntPtr VirtualAllocEx(IntPtr Process, IntPtr Address, IntPtr Size, AllocationType Type,
+            MemoryProtection Protection);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool WriteProcessMemory(IntPtr Process, IntPtr Address, [MarshalAs(UnmanagedType.AsAny)] object Buffer, int Size, out IntPtr Written);
+        public static extern bool WriteProcessMemory(IntPtr Process, IntPtr Address,
+            [MarshalAs(UnmanagedType.AsAny)] object Buffer, int Size, out IntPtr Written);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
         public static extern IntPtr GetProcAddress(IntPtr Module, string Name);
@@ -80,14 +80,13 @@ namespace WxInjector.Core
         public static extern IntPtr GetModuleHandle(string Name);
 
         [DllImport("kernel32.dll")]
-        public static extern IntPtr CreateRemoteThread(IntPtr Process, IntPtr Attributes, uint Size, IntPtr Address, IntPtr Parameter, uint Flags, IntPtr Thread);
+        public static extern IntPtr CreateRemoteThread(IntPtr Process, IntPtr Attributes, uint Size, IntPtr Address,
+            IntPtr Parameter, uint Flags, IntPtr Thread);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool CloseHandle(IntPtr Object);
-
     }
-
 }

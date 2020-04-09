@@ -5,13 +5,9 @@ using System.Text;
 
 namespace WxInjector.Core
 {
-
     [SuppressMessage("Design", "CA1063")]
     public class Injector : IDisposable
     {
-
-        private readonly Process Target;
-
         public enum Result
         {
             SystemProcessDisallowed,
@@ -24,9 +20,18 @@ namespace WxInjector.Core
             InjectionSuccessful
         }
 
+        private readonly Process Target;
+
         public Injector(int Target)
         {
             this.Target = Process.GetProcessById(Target);
+        }
+
+        [SuppressMessage("Design", "CA1063")]
+        [SuppressMessage("Usage", "CA1816")]
+        public void Dispose()
+        {
+            Target.Dispose();
         }
 
         [SuppressMessage("Design", "CA1062")]
@@ -37,7 +42,9 @@ namespace WxInjector.Core
             var Process = Interop.OpenProcess(Interop.ProcessAccessFlags.All, false, Target.Id);
             if (Process == null)
                 return Result.ObtainingProcessHandleFailed;
-            var Allocation = Interop.VirtualAllocEx(Process, IntPtr.Zero, (IntPtr)Location.Length, Interop.AllocationType.Reserve | Interop.AllocationType.Commit, Interop.MemoryProtection.ExecuteReadWrite);
+            var Allocation = Interop.VirtualAllocEx(Process, IntPtr.Zero, (IntPtr)Location.Length,
+                Interop.AllocationType.Reserve | Interop.AllocationType.Commit,
+                Interop.MemoryProtection.ExecuteReadWrite);
             if (Allocation == null)
                 return Result.DLLAllocationFailed;
             var Bytes = Encoding.ASCII.GetBytes(Location);
@@ -58,14 +65,5 @@ namespace WxInjector.Core
             Interop.CloseHandle(Process);
             return Result.InjectionSuccessful;
         }
-
-        [SuppressMessage("Design", "CA1063")]
-        [SuppressMessage("Usage", "CA1816")]
-        public void Dispose()
-        {
-            Target.Dispose();
-        }
-
     }
-
 }
