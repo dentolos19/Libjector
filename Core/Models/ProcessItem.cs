@@ -1,7 +1,9 @@
 ﻿namespace WxInjector.Core.Models
 {
+
     internal class ProcessItem
     {
+
         public int Process = -1;
         public string Text;
 
@@ -15,5 +17,7 @@
         {
             return Text;
         }
+
     }
+
 }

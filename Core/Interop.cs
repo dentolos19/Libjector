@@ -6,11 +6,13 @@ using System.Security;
 
 namespace WxInjector.Core
 {
+
     [SuppressMessage("Design", "CA1060")]
     [SuppressMessage("Globalization", "CA2101")]
     [SuppressMessage("Design", "CA1028")]
     internal static class Interop
     {
+
         [Flags]
         public enum AllocationType
         {
@@ -88,5 +90,11 @@ namespace WxInjector.Core
         [SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool CloseHandle(IntPtr Object);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool AllocConsole();
+
     }
+
 }

@@ -4,9 +4,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WxInjector.Core.Models
 {
+
     [Serializable]
     internal class Records
     {
+
         public static readonly string Source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WxInjector.cfg");
         private static readonly BinaryFormatter Formatter = new BinaryFormatter();
 
@@ -22,14 +24,14 @@ namespace WxInjector.Core.Models
         public static Records Load()
         {
             var Result = new Records();
-            if (File.Exists(Source))
-            {
-                var Stream = new FileStream(Source, FileMode.Open);
-                Result = Formatter.Deserialize(Stream) as Records;
-                Stream.Close();
-            }
-
+            if (!File.Exists(Source))
+                return Result;
+            var Stream = new FileStream(Source, FileMode.Open);
+            Result = Formatter.Deserialize(Stream) as Records;
+            Stream.Close();
             return Result;
         }
+
     }
+
 }

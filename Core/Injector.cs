@@ -5,9 +5,11 @@ using System.Text;
 
 namespace WxInjector.Core
 {
+
     [SuppressMessage("Design", "CA1063")]
     public class Injector : IDisposable
     {
+
         public enum Result
         {
             SystemProcessDisallowed,
@@ -65,5 +67,7 @@ namespace WxInjector.Core
             Interop.CloseHandle(Process);
             return Result.InjectionSuccessful;
         }
+
     }
+
 }

@@ -9,9 +9,11 @@ using WxInjector.Core.Models;
 
 namespace WxInjector.Graphics
 {
+
     [SuppressMessage("Globalization", "CA1303")]
     public partial class WnMain : Form
     {
+
         private Records User;
 
         public WnMain()
@@ -74,7 +76,6 @@ namespace WxInjector.Graphics
                         MessageBox.Show("Unable to release memory!", "WxInjector");
                         break;
                 }
-
                 return;
             }
 
@@ -166,20 +167,20 @@ namespace WxInjector.Graphics
 
         private void ProcessesClick(object Sender, MouseEventArgs Arguments)
         {
-            if (LbProcesses.SelectedItem != null)
-            {
-                var Item = LbProcesses.SelectedItem as ProcessItem;
-                TbProcess.Text = Item.Text;
-            }
+            if (LbProcesses.SelectedItem == null)
+                return;
+            var Item = LbProcesses.SelectedItem as ProcessItem;
+            TbProcess.Text = Item.Text;
         }
 
         private void DLLsClick(object Sender, MouseEventArgs Arguments)
         {
-            if (LbDLLs.SelectedItem != null)
-            {
-                var Item = LbDLLs.SelectedItem;
-                TbDLL.Text = LbDLLs.GetItemText(Item);
-            }
+            if (LbDLLs.SelectedItem == null)
+                return;
+            var Item = LbDLLs.SelectedItem;
+            TbDLL.Text = LbDLLs.GetItemText(Item);
         }
+
     }
+
 }
