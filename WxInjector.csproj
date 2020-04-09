@@ -88,6 +88,8 @@
   <ItemGroup>
     <Compile Include="Core\Injector.cs" />
     <Compile Include="Core\Interop.cs" />
+    <Compile Include="Core\Models\ProcessItem.cs" />
+    <Compile Include="Core\Models\Records.cs" />
     <Compile Include="Graphics\WnMain.cs">
       <SubType>Form</SubType>
     </Compile>

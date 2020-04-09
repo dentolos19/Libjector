@@ -4,12 +4,12 @@
     partial class WnMain
     {
 
-        private System.ComponentModel.IContainer Components = null;
+        private System.ComponentModel.IContainer components = null;
 
         protected override void Dispose(bool Disposing)
         {
-            if (Disposing && (Components != null))
-                Components.Dispose();
+            if (Disposing && (components != null))
+                components.Dispose();
             base.Dispose(Disposing);
         }
 
@@ -41,7 +41,7 @@
             this.GbProcesses.Size = new System.Drawing.Size(250, 329);
             this.GbProcesses.TabIndex = 0;
             this.GbProcesses.TabStop = false;
-            this.GbProcesses.Text = "Processes (Updates Every 5 secs)";
+            this.GbProcesses.Text = "Processes";
             // 
             // LbProcesses
             // 
@@ -186,7 +186,6 @@
         private System.Windows.Forms.Label LaStatus;
         private System.Windows.Forms.Button BnExit;
         private System.Windows.Forms.Timer Refresher;
-        private System.ComponentModel.IContainer components;
 
     }
 

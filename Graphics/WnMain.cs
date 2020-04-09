@@ -1,10 +1,10 @@
 ﻿using WxInjector.Core;
+using WxInjector.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
 namespace WxInjector.Graphics
@@ -14,7 +14,7 @@ namespace WxInjector.Graphics
     public partial class WnMain : Form
     {
 
-        private Data User = null;
+        private Records User = null;
 
         public WnMain()
         {
@@ -24,7 +24,7 @@ namespace WxInjector.Graphics
         [SuppressMessage("Design", "CA1031")]
         private void Inject(object Sender, EventArgs Arguments)
         {
-            var Item = LbProcesses.SelectedItem as Item;
+            var Item = LbProcesses.SelectedItem as ProcessItem;
             if (LbProcesses.SelectedItem == null || LbDLLs.SelectedItem == null)
             {
                 MessageBox.Show("Select a process or DLL first before injecting!", "WxInjector");
@@ -84,8 +84,10 @@ namespace WxInjector.Graphics
 
         private void Add(object Sender, EventArgs Arguments)
         {
-            var Dialog = new OpenFileDialog();
-            Dialog.Filter = "Dynamic Link Library|*.dll";
+            var Dialog = new OpenFileDialog
+            {
+                Filter = "Dynamic Link Library|*.dll"
+            };
             if (Dialog.ShowDialog() == DialogResult.OK)
                 LbDLLs.Items.Add(Dialog.FileName);
             Dialog.Dispose();
@@ -109,14 +111,14 @@ namespace WxInjector.Graphics
             foreach (var Process in Processes)
             {
                 if (!string.IsNullOrEmpty(Process.MainWindowTitle))
-                    LbProcesses.Items.Add(new Item(Process.ProcessName + ".exe", Process.Id));
+                    LbProcesses.Items.Add(new ProcessItem(Process.ProcessName + ".exe", Process.Id));
                 Process.Dispose();
             }
         }
 
         private void Start(object Sender, EventArgs Arguments)
         {
-            User = Data.Load();
+            User = Records.Load();
             if (User.DLLs != null)
                 foreach (var Item in User.DLLs)
                     LbDLLs.Items.Add(Item);
@@ -139,50 +141,6 @@ namespace WxInjector.Graphics
                 User.DLLs = List.ToArray();
             }
             User.Save();
-        }
-
-        private class Item
-        {
-
-            public int Process = -1;
-            public string Text = null;
-
-            public Item(string Text, int Process)
-            {
-                this.Text = Text;
-                this.Process = Process;
-            }
-
-            public override string ToString()
-            {
-                return Text;
-            }
-
-        }
-
-        [Serializable]
-        private class Data
-        {
-
-            public static string Source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WxInjector.cfg");
-            private static BinaryFormatter Formatter = new BinaryFormatter();
-
-            public string[] DLLs = null;
-
-            public void Save()
-            {
-                using (var Stream = new FileStream(Source, FileMode.Create))
-                    Formatter.Serialize(Stream, this);
-            }
-
-            public static Data Load()
-            {
-                if (File.Exists(Source))
-                    using (var Stream = new FileStream(Source, FileMode.Open))
-                        return Formatter.Deserialize(Stream) as Data;
-                return new Data();
-            }
-
         }
 
         [SuppressMessage("Globalization", "CA1304")]

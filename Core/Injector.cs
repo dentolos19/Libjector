@@ -10,7 +10,7 @@ namespace WxInjector.Core
     public class Injector : IDisposable
     {
 
-        private Process Target;
+        private readonly Process Target;
 
         public enum Result
         {
@@ -41,7 +41,7 @@ namespace WxInjector.Core
             if (Allocation == null)
                 return Result.DLLAllocationFailed;
             var Bytes = Encoding.ASCII.GetBytes(Location);
-            var Write = Interop.WriteProcessMemory(Process, Allocation, Bytes, Bytes.Length, out var Written);
+            var Write = Interop.WriteProcessMemory(Process, Allocation, Bytes, Bytes.Length, out _);
             if (Write == false)
                 return Result.DLLWritingFailed;
             var Kernel = Interop.GetModuleHandle("kernel32.dll");
