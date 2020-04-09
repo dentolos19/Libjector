@@ -105,7 +105,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Program.manifest" />
     <None Include="Properties\AssemblyKey.snk" />
   </ItemGroup>
