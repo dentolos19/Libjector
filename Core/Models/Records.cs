@@ -16,20 +16,20 @@ namespace WxInjector.Core.Models
 
         public void Save()
         {
-            var Stream = new FileStream(Source, FileMode.Create);
-            Formatter.Serialize(Stream, this);
-            Stream.Close();
+            var stream = new FileStream(Source, FileMode.Create);
+            Formatter.Serialize(stream, this);
+            stream.Close();
         }
 
         public static Records Load()
         {
-            var Result = new Records();
+            var result = new Records();
             if (!File.Exists(Source))
-                return Result;
-            var Stream = new FileStream(Source, FileMode.Open);
-            Result = Formatter.Deserialize(Stream) as Records;
-            Stream.Close();
-            return Result;
+                return result;
+            var stream = new FileStream(Source, FileMode.Open);
+            result = Formatter.Deserialize(stream) as Records;
+            stream.Close();
+            return result;
         }
 
     }

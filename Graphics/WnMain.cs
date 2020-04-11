@@ -36,8 +36,7 @@ namespace WxInjector.Graphics
                 MessageBox.Show(@"Select a process or DLL first before injecting!", @"WxInjector");
                 return;
             }
-
-            if (item != null && item.Process == -1)
+            if (item.Process == -1)
             {
                 MessageBox.Show(@"This process can't be injected!", @"WxInjector");
                 return;
@@ -200,12 +199,11 @@ namespace WxInjector.Graphics
             var client = new WebClient();
             var data = client.DownloadString("https://raw.githubusercontent.com/dentolos19/WxInjector/master/VERSION");
             client.Dispose();
-            if (Version.Parse(Application.ProductVersion) > Version.Parse(data))
-            {
-                var result = MessageBox.Show(@"Updates is available! Do you want to download it now?", @"WxInjector", MessageBoxButtons.YesNo);
-                if (result == DialogResult.OK)
-                    Process.Start("https://github.com/dentolos19/WxInjector/releases");
-            }
+            if (Version.Parse(data) < Version.Parse(Application.ProductVersion))
+                return;
+            var result = MessageBox.Show(@"Updates is available! Do you want to download it now?", @"WxInjector", MessageBoxButtons.YesNo);
+            if (result == DialogResult.OK)
+                Process.Start("https://github.com/dentolos19/WxInjector/releases");
         }
 
     }

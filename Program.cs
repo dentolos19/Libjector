@@ -17,51 +17,51 @@ namespace WxInjector
         [SuppressMessage("Design", "CA1031")]
         public static void Main()
         {
-            var Arguments = Environment.GetCommandLineArgs();
-            if (Arguments.Length == 2)
+            var arguments = Environment.GetCommandLineArgs();
+            if (arguments.Length == 2)
             {
                 Native.AllocConsole();
-                Console.WriteLine("[WxInjector] Injecting DLL into Process...");
-                var Result = Injector.Result.InjectionSuccessful;
+                Console.WriteLine(@"[WxInjector] Injecting DLL into Process...");
+                var result = Injector.Result.InjectionSuccessful;
                 try
                 {
-                    var Injector = new Injector(int.Parse(Arguments[0]));
-                    Result = Injector.Inject(Arguments[1]);
-                    Injector.Dispose();
+                    var injector = new Injector(int.Parse(arguments[0]));
+                    result = injector.Inject(arguments[1]);
+                    injector.Dispose();
                 }
-                catch (Exception Error)
+                catch (Exception error)
                 {
-                    Console.WriteLine("[WxInjector] An error had occurred! {0}", Error.Message);
+                    Console.WriteLine(@"[WxInjector] An error had occurred! {0}", error.Message);
                 }
-                if (Result != Injector.Result.InjectionSuccessful)
+                if (result != Injector.Result.InjectionSuccessful)
                 {
-                    switch (Result)
+                    switch (result)
                     {
                         case Injector.Result.SystemProcessDisallowed:
-                            Console.WriteLine("[WxInjector] Injecting into system process is not allowed! Injection unsuccessful!");
+                            Console.WriteLine(@"[WxInjector] Injecting into system process is not allowed! Injection unsuccessful!");
                             break;
                         case Injector.Result.ObtainingProcessHandleFailed:
-                            Console.WriteLine("[WxInjector] Obtaining process handle failed! Injection unsuccessful!");
+                            Console.WriteLine(@"[WxInjector] Obtaining process handle failed! Injection unsuccessful!");
                             break;
                         case Injector.Result.DLLAllocationFailed:
-                            Console.WriteLine("[WxInjector] DLL allocation failed! Injection unsuccessful!");
+                            Console.WriteLine(@"[WxInjector] DLL allocation failed! Injection unsuccessful!");
                             break;
                         case Injector.Result.DLLWritingFailed:
-                            Console.WriteLine("[WxInjector] DLL writing failed! Injection unsuccessful!");
+                            Console.WriteLine(@"[WxInjector] DLL writing failed! Injection unsuccessful!");
                             break;
                         case Injector.Result.ObtainingLoaderAddressFailed:
-                            Console.WriteLine("[WxInjector] Obtaining loader address failed! Injection unsuccessful!");
+                            Console.WriteLine(@"[WxInjector] Obtaining loader address failed! Injection unsuccessful!");
                             break;
                         case Injector.Result.ObtainingThreadHandleFailed:
-                            Console.WriteLine("[WxInjector] Obtaining thread handle failed! Injection unsuccessful!");
+                            Console.WriteLine(@"[WxInjector] Obtaining thread handle failed! Injection unsuccessful!");
                             break;
                         case Injector.Result.UnableReleaseMemory:
-                            Console.WriteLine("[WxInjector] Unable to release memory! Injection might be successful!");
+                            Console.WriteLine(@"[WxInjector] Unable to release memory! Injection might be successful!");
                             break;
                     }
                     return;
                 }
-                Console.WriteLine("[WxInjector] Injection successful!");
+                Console.WriteLine(@"[WxInjector] Injection successful!");
             }
             else
             {

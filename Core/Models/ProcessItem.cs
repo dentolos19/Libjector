@@ -4,13 +4,13 @@
     internal class ProcessItem
     {
 
-        public int Process = -1;
-        public string Text;
+        public readonly int Process = -1;
+        public readonly string Text;
 
-        public ProcessItem(string Text, int Process)
+        public ProcessItem(string text, int process)
         {
-            this.Text = Text;
-            this.Process = Process;
+            Text = text;
+            Process = process;
         }
 
         public override string ToString()
