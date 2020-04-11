@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Net;
 using System.Windows.Forms;
 using WxInjector.Core;
 using WxInjector.Core.Models;
@@ -20,6 +22,9 @@ namespace WxInjector.Graphics
         {
             InitializeComponent();
             Refresh(null, null);
+            var userOnline = Native.InternetGetConnectedState(out _, 0);
+            if (userOnline)
+                Checker.RunWorkerAsync();
         }
 
         [SuppressMessage("Design", "CA1031")]
@@ -188,6 +193,19 @@ namespace WxInjector.Graphics
                 return;
             var item = LbDLLs.SelectedItem;
             TbDLL.Text = LbDLLs.GetItemText(item);
+        }
+
+        private void CheckForUpdates(object sender, DoWorkEventArgs e)
+        {
+            var client = new WebClient();
+            var data = client.DownloadString("https://raw.githubusercontent.com/dentolos19/WxInjector/master/VERSION");
+            client.Dispose();
+            if (Version.Parse(Application.ProductVersion) > Version.Parse(data))
+            {
+                var result = MessageBox.Show(@"Updates is available! Do you want to download it now?", @"WxInjector", MessageBoxButtons.YesNo);
+                if (result == DialogResult.OK)
+                    Process.Start("https://github.com/dentolos19/WxInjector/releases");
+            }
         }
 
     }

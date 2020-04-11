@@ -20,7 +20,7 @@ namespace WxInjector
             var Arguments = Environment.GetCommandLineArgs();
             if (Arguments.Length == 2)
             {
-                Interop.AllocConsole();
+                Native.AllocConsole();
                 Console.WriteLine("[WxInjector] Injecting DLL into Process...");
                 var Result = Injector.Result.InjectionSuccessful;
                 try

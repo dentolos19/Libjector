@@ -41,30 +41,30 @@ namespace WxInjector.Core
         {
             if (Target.Id == 0 || Target.Id == 4)
                 return Result.SystemProcessDisallowed;
-            var Process = Interop.OpenProcess(Interop.ProcessAccessFlags.All, false, Target.Id);
+            var Process = Native.OpenProcess(Native.ProcessAccessFlags.All, false, Target.Id);
             if (Process == null)
                 return Result.ObtainingProcessHandleFailed;
-            var Allocation = Interop.VirtualAllocEx(Process, IntPtr.Zero, (IntPtr)Location.Length,
-                Interop.AllocationType.Reserve | Interop.AllocationType.Commit,
-                Interop.MemoryProtection.ExecuteReadWrite);
+            var Allocation = Native.VirtualAllocEx(Process, IntPtr.Zero, (IntPtr)Location.Length,
+                Native.AllocationType.Reserve | Native.AllocationType.Commit,
+                Native.MemoryProtection.ExecuteReadWrite);
             if (Allocation == null)
                 return Result.DLLAllocationFailed;
             var Bytes = Encoding.ASCII.GetBytes(Location);
-            var Write = Interop.WriteProcessMemory(Process, Allocation, Bytes, Bytes.Length, out _);
+            var Write = Native.WriteProcessMemory(Process, Allocation, Bytes, Bytes.Length, out _);
             if (Write == false)
                 return Result.DLLWritingFailed;
-            var Kernel = Interop.GetModuleHandle("kernel32.dll");
-            var Loader = Interop.GetProcAddress(Kernel, "LoadLibraryA");
+            var Kernel = Native.GetModuleHandle("kernel32.dll");
+            var Loader = Native.GetProcAddress(Kernel, "LoadLibraryA");
             if (Loader == null)
                 return Result.ObtainingLoaderAddressFailed;
-            var Thread = Interop.CreateRemoteThread(Process, IntPtr.Zero, 0, Loader, Allocation, 0, IntPtr.Zero);
+            var Thread = Native.CreateRemoteThread(Process, IntPtr.Zero, 0, Loader, Allocation, 0, IntPtr.Zero);
             if (Thread == null)
                 return Result.ObtainingThreadHandleFailed;
-            var Release = Interop.VirtualFreeEx(Process, Allocation, 0, Interop.AllocationType.Release);
+            var Release = Native.VirtualFreeEx(Process, Allocation, 0, Native.AllocationType.Release);
             if (Release == false)
                 return Result.UnableReleaseMemory;
-            Interop.CloseHandle(Thread);
-            Interop.CloseHandle(Process);
+            Native.CloseHandle(Thread);
+            Native.CloseHandle(Process);
             return Result.InjectionSuccessful;
         }
 

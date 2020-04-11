@@ -30,6 +30,7 @@
             this.BnInject = new System.Windows.Forms.Button();
             this.LaStatus = new System.Windows.Forms.Label();
             this.BnExit = new System.Windows.Forms.Button();
+            this.Checker = new System.ComponentModel.BackgroundWorker();
             this.GbProcesses.SuspendLayout();
             this.GbDLLs.SuspendLayout();
             this.SuspendLayout();
@@ -81,7 +82,7 @@
             this.LaTitle.Name = "LaTitle";
             this.LaTitle.Size = new System.Drawing.Size(502, 30);
             this.LaTitle.TabIndex = 1;
-            this.LaTitle.Text = "WxInjector";
+            this.LaTitle.Text = "WxInjector v1.1.0";
             this.LaTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // GbDLLs
@@ -178,6 +179,10 @@
             this.BnExit.UseVisualStyleBackColor = true;
             this.BnExit.Click += new System.EventHandler(this.Exit);
             // 
+            // Checker
+            // 
+            this.Checker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.CheckForUpdates);
+            // 
             // WnMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -218,7 +223,7 @@
         private System.Windows.Forms.Button BnRefresh;
         private System.Windows.Forms.TextBox TbProcess;
         private System.Windows.Forms.TextBox TbDLL;
-
+        private System.ComponentModel.BackgroundWorker Checker;
     }
 
 }
