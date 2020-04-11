@@ -202,7 +202,7 @@ namespace WxInjector.Graphics
             if (Version.Parse(data) < Version.Parse(Application.ProductVersion))
                 return;
             var result = MessageBox.Show(@"Updates is available! Do you want to download it now?", @"WxInjector", MessageBoxButtons.YesNo);
-            if (result == DialogResult.OK)
+            if (result == DialogResult.Yes)
                 Process.Start("https://github.com/dentolos19/WxInjector/releases");
         }
 

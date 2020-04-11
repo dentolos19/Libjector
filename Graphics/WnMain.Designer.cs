@@ -82,7 +82,7 @@
             this.LaTitle.Name = "LaTitle";
             this.LaTitle.Size = new System.Drawing.Size(502, 30);
             this.LaTitle.TabIndex = 1;
-            this.LaTitle.Text = "WxInjector v1.1.1";
+            this.LaTitle.Text = "WxInjector v1.1.2";
             this.LaTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // GbDLLs
