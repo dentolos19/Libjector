@@ -14,7 +14,7 @@ namespace WxInjector.Graphics
     public partial class WnMain : Form
     {
 
-        private Records User;
+        private Records _user;
 
         public WnMain()
         {
@@ -23,162 +23,171 @@ namespace WxInjector.Graphics
         }
 
         [SuppressMessage("Design", "CA1031")]
-        private void Inject(object Sender, EventArgs Arguments)
+        private void Inject(object sender, EventArgs e)
         {
-            var Item = LbProcesses.SelectedItem as ProcessItem;
+            var item = LbProcesses.SelectedItem as ProcessItem;
             if (LbProcesses.SelectedItem == null || LbDLLs.SelectedItem == null)
             {
-                MessageBox.Show("Select a process or DLL first before injecting!", "WxInjector");
+                MessageBox.Show(@"Select a process or DLL first before injecting!", @"WxInjector");
                 return;
             }
 
-            if (Item.Process == -1)
+            if (item != null && item.Process == -1)
             {
-                MessageBox.Show("This process can't be injected!", "WxInjector");
+                MessageBox.Show(@"This process can't be injected!", @"WxInjector");
                 return;
             }
-
-            var Result = Injector.Result.InjectionSuccessful;
+            var result = Injector.Result.InjectionSuccessful;
             try
             {
-                var Injector = new Injector(Item.Process);
-                Result = Injector.Inject(LbDLLs.GetItemText(LbDLLs.SelectedItem));
-                Injector.Dispose();
+                var injector = new Injector(item.Process);
+                result = injector.Inject(LbDLLs.GetItemText(LbDLLs.SelectedItem));
+                injector.Dispose();
             }
-            catch (Exception Error)
+            catch (Exception error)
             {
-                MessageBox.Show("An error has occurred! " + Error.Message, "WxInjector");
+                MessageBox.Show(@"An error has occurred! " + error.Message, @"WxInjector");
             }
-
-            if (Result != Injector.Result.InjectionSuccessful)
+            if (result != Injector.Result.InjectionSuccessful)
             {
-                switch (Result)
+                switch (result)
                 {
                     case Injector.Result.SystemProcessDisallowed:
-                        MessageBox.Show("Injecting into system process is not allowed!", "WxInjector");
+                        MessageBox.Show(@"Injecting into system process is not allowed!", @"WxInjector");
                         break;
                     case Injector.Result.ObtainingProcessHandleFailed:
-                        MessageBox.Show("Failed obtaining process handle!", "WxInjector");
+                        MessageBox.Show(@"Failed obtaining process handle!", @"WxInjector");
                         break;
                     case Injector.Result.DLLAllocationFailed:
-                        MessageBox.Show("Memory allocation for DLL failed!", "WxInjector");
+                        MessageBox.Show(@"Memory allocation for DLL failed!", @"WxInjector");
                         break;
                     case Injector.Result.DLLWritingFailed:
-                        MessageBox.Show("Memory writing for DLL failed!", "WxInjector");
+                        MessageBox.Show(@"Memory writing for DLL failed!", @"WxInjector");
                         break;
                     case Injector.Result.ObtainingLoaderAddressFailed:
-                        MessageBox.Show("Failed obtaining library loader address!", "WxInjector");
+                        MessageBox.Show(@"Failed obtaining library loader address!", @"WxInjector");
                         break;
                     case Injector.Result.ObtainingThreadHandleFailed:
-                        MessageBox.Show("Failed obtaining thread handle!", "WxInjector");
+                        MessageBox.Show(@"Failed obtaining thread handle!", @"WxInjector");
                         break;
                     case Injector.Result.UnableReleaseMemory:
-                        MessageBox.Show("Unable to release memory!", "WxInjector");
+                        MessageBox.Show(@"Unable to release memory!", @"WxInjector");
                         break;
                 }
+
                 return;
             }
 
-            MessageBox.Show("DLL successfully injected into process!", "WxInjector");
+            MessageBox.Show(@"DLL successfully injected into process!", @"WxInjector");
         }
 
-        private void Exit(object Sender, EventArgs Arguments)
+        private void Exit(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        private void Add(object Sender, EventArgs Arguments)
+        private void Add(object sender, EventArgs e)
         {
-            var Dialog = new OpenFileDialog
+            var dialog = new OpenFileDialog
             {
-                Filter = "Dynamic Link Library|*.dll"
+                Filter = @"Dynamic Link Library|*.dll"
             };
-            if (Dialog.ShowDialog() == DialogResult.OK)
-                LbDLLs.Items.Add(Dialog.FileName);
-            Dialog.Dispose();
+            if (dialog.ShowDialog() == DialogResult.OK)
+                LbDLLs.Items.Add(dialog.FileName);
+            dialog.Dispose();
         }
 
-        private void Remove(object Sender, EventArgs Arguments)
+        private void Remove(object sender, EventArgs e)
         {
             TbDLL.Text = string.Empty;
             if (LbDLLs.SelectedItem != null)
                 LbDLLs.Items.Remove(LbDLLs.SelectedItem);
         }
 
-        private void Clear(object Sender, EventArgs Arguments)
+        private void Clear(object sender, EventArgs e)
         {
             TbDLL.Text = string.Empty;
             LbDLLs.Items.Clear();
         }
 
-        private void Start(object Sender, EventArgs Arguments)
+        private void Start(object sender, EventArgs e)
         {
-            User = Records.Load();
-            if (User.DLLs != null)
-                foreach (var Item in User.DLLs)
-                    LbDLLs.Items.Add(Item);
+            _user = Records.Load();
+            if (_user.DLLs == null)
+                return;
+            foreach (var item in _user.DLLs)
+                LbDLLs.Items.Add(item);
         }
 
-        private void Release(object Sender, FormClosingEventArgs Arguments)
+        private void Release(object sender, FormClosingEventArgs e)
         {
             if (LbDLLs.Items.Count != 0)
             {
-                var List = new List<string>();
-                foreach (var Item in LbDLLs.Items)
-                    List.Add(Item.ToString());
-                User.DLLs = List.ToArray();
+                var list = new List<string>();
+                foreach (var item in LbDLLs.Items)
+                    list.Add(item.ToString());
+                _user.DLLs = list.ToArray();
             }
             else
             {
-                var List = new List<string>();
-                User.DLLs = List.ToArray();
+                var list = new List<string>();
+                _user.DLLs = list.ToArray();
             }
 
-            User.Save();
+            _user.Save();
         }
 
         [SuppressMessage("Globalization", "CA1304")]
         [SuppressMessage("Globalization", "CA1307")]
-        private void FileDrop(object Sender, DragEventArgs Arguments)
+        private void FileDrop(object sender, DragEventArgs e)
         {
-            var Files = Arguments.Data.GetData(DataFormats.FileDrop) as string[];
-            foreach (var Item in Files)
-                if (Path.GetExtension(Item).ToLower().EndsWith("dll"))
-                    LbDLLs.Items.Add(Item);
+            if (!(e.Data.GetData(DataFormats.FileDrop) is string[] files))
+                return;
+            foreach (var item in files)
+                if (Path.GetExtension(item).ToLower().EndsWith("dll"))
+                    LbDLLs.Items.Add(item);
                 else
-                    MessageBox.Show(Item + " is not a valid DLL file!", "WxInjector");
+                    MessageBox.Show(item + @" is not a valid DLL file!", @"WxInjector");
+
         }
 
-        private void FileEnter(object Sender, DragEventArgs Arguments)
+        private void FileEnter(object sender, DragEventArgs e)
         {
-            if (Arguments.Data.GetDataPresent(DataFormats.FileDrop))
-                Arguments.Effect = DragDropEffects.Copy;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
         }
 
-        private void Refresh(object Sender, EventArgs Arguments)
+        private void Refresh(object sender, EventArgs e)
         {
             TbProcess.Text = string.Empty;
             LbProcesses.Items.Clear();
-            var Processes = Process.GetProcesses();
-            foreach (var Item in Processes)
-                if (!string.IsNullOrEmpty(Item.MainWindowTitle))
-                    LbProcesses.Items.Add(new ProcessItem(Item.ProcessName + ".exe", Item.Id));
+            var processes = Process.GetProcesses();
+            foreach (var item in processes)
+                if (!string.IsNullOrEmpty(item.MainWindowTitle))
+                    LbProcesses.Items.Add(new ProcessItem(item.ProcessName + ".exe", item.Id));
         }
 
-        private void ProcessesClick(object Sender, MouseEventArgs Arguments)
+        private void ProcessesClick(object sender, MouseEventArgs e)
         {
-            if (LbProcesses.SelectedItem == null)
-                return;
-            var Item = LbProcesses.SelectedItem as ProcessItem;
-            TbProcess.Text = Item.Text;
+            switch (LbProcesses.SelectedItem)
+            {
+                case null:
+                    return;
+                case ProcessItem item:
+                    TbProcess.Text = item.Text;
+                    break;
+                default:
+                    MessageBox.Show(@"Internal code malfunction!", @"WxInjector");
+                    break;
+            }
         }
 
-        private void DLLsClick(object Sender, MouseEventArgs Arguments)
+        private void DLLsClick(object sender, MouseEventArgs e)
         {
             if (LbDLLs.SelectedItem == null)
                 return;
-            var Item = LbDLLs.SelectedItem;
-            TbDLL.Text = LbDLLs.GetItemText(Item);
+            var item = LbDLLs.SelectedItem;
+            TbDLL.Text = LbDLLs.GetItemText(item);
         }
 
     }
