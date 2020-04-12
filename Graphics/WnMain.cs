@@ -137,7 +137,6 @@ namespace WxInjector.Graphics
                 var list = new List<string>();
                 _user.DLLs = list.ToArray();
             }
-
             _user.Save();
         }
 
