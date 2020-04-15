@@ -24,6 +24,7 @@ namespace WxInjector.Graphics
 
         private void RefreshProcesses(object sender, RoutedEventArgs e)
         {
+            TbProcess.Text = string.Empty;
             LbProcesses.Items.Clear();
             var processes = Process.GetProcesses();
             foreach (var process in processes)
@@ -51,9 +52,12 @@ namespace WxInjector.Graphics
 
         private void ProcessSelected(object sender, SelectionChangedEventArgs e)
         {
-            var item = LbProcesses.SelectedItem as ListBoxItem;
-            TbProcess.Text = item.Content.ToString();
-            _target = int.Parse(item.Tag.ToString());
+            if (LbProcesses.SelectedItem != null)
+            {
+                var item = LbProcesses.SelectedItem as ListBoxItem;
+                TbProcess.Text = item.Content.ToString();
+                _target = int.Parse(item.Tag.ToString());
+            }
         }
 
         private void Inject(object sender, RoutedEventArgs e)
