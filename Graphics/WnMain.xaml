@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <Button Content="Refresh" HorizontalAlignment="Center" VerticalAlignment="Center" Width="130" Height="30" Click="RefreshProcesses"/>
         <ListBox x:Name="LbProcesses" Grid.Row="1" Grid.Column="0" Margin="10,0,10,10" SelectionChanged="ProcessSelected"/>
-        <Label Content="WxInjector" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="450" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20"/>
+        <Label Content="WxInjector v1.2.1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="450" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20"/>
         <Label Content="Process" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Height="25" VerticalContentAlignment="Center" Width="450"/>
         <TextBox x:Name="TbProcess" Grid.Column="1" HorizontalAlignment="Left" Margin="0,25,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="440" Height="25" VerticalContentAlignment="Center" IsReadOnly="True"/>
         <Label Content="Library" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Height="25" VerticalContentAlignment="Center" Width="450" Margin="0,55,0,0"/>
