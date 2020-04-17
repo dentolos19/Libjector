@@ -8,10 +8,18 @@
     <Authors>Dennise</Authors>
     <Copyright>Copyright © 2020</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
 	  <Version>1.2.1</Version>
-	  <ApplicationIcon>Icon.ico</ApplicationIcon>
+	  <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
+	  <AssemblyOriginatorKeyFile>Properties\AssemblyKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\PublishProfiles\**" />
+    <EmbeddedResource Remove="Properties\PublishProfiles\**" />
+    <None Remove="Properties\PublishProfiles\**" />
+    <Page Remove="Properties\PublishProfiles\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove=".gitattributes" />
