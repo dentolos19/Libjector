@@ -9,7 +9,7 @@ using Bleak;
 using Microsoft.Win32;
 
 namespace WxInjector.Graphics
-{ 
+{
 
     public partial class WnMain
     {
@@ -48,7 +48,8 @@ namespace WxInjector.Graphics
                 Filter = "Dynamic Link Library|*.dll"
             };
             if (openDialog.ShowDialog() == true)
-                TbLibrary.Text = openDialog.FileName; }
+                TbLibrary.Text = openDialog.FileName;
+        }
 
         private void ProcessSelected(object sender, SelectionChangedEventArgs e)
         {
