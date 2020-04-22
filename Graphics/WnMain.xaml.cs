@@ -1,12 +1,10 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using Bleak;
 using Microsoft.Win32;
+using WxInjector.Core;
 
 namespace WxInjector.Graphics
 {
@@ -98,10 +96,12 @@ namespace WxInjector.Graphics
 
         private void CheckForUpdates(object sender, RoutedEventArgs e)
         {
-            var client = new WebClient();
-            var data = client.DownloadString("https://raw.githubusercontent.com/dentolos19/WxInjector/master/VERSION");
-            client.Dispose();
-            if (Version.Parse(data) > Assembly.GetExecutingAssembly().GetName().Version)
+            if (!Utilities.IsUserOnline())
+            {
+                MessageBox.Show("An internet connection is required for this operation!", "WxInjector");
+                return;
+            }
+            if (Utilities.IsUpdateAvailable())
             {
                 var result = MessageBox.Show("Updates is available! Do you want to visit the download page?", @"WxInjector", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
