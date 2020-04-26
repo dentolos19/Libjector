@@ -15,7 +15,7 @@
                 Click="RefreshProcesses" />
         <ListBox x:Name="LbProcesses" Grid.Row="1" Grid.Column="0" Margin="10,0,10,10"
                  SelectionChanged="ProcessSelected" />
-        <Label Content="WxInjector v1.2.1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center"
+        <Label Content="WxInjector v1.2.2" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center"
                VerticalAlignment="Center" Height="50" Width="450" VerticalContentAlignment="Center"
                HorizontalContentAlignment="Center" FontSize="20" />
         <Label Content="Process" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top"
