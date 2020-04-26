@@ -29,34 +29,26 @@ namespace WxInjector.Graphics
             {
                 if (string.IsNullOrEmpty(process.MainWindowTitle))
                     continue;
-                var item = new ListBoxItem
-                {
-                    Content = $"{process.ProcessName}.exe ({process.Id})",
-                    Tag = process.Id.ToString()
-                };
+
+                var item = new ListBoxItem { Content = $"{process.ProcessName}.exe ({process.Id})", Tag = process.Id.ToString() };
                 LbProcesses.Items.Add(item);
             }
         }
 
         private void BrowseLibrary(object sender, RoutedEventArgs e)
         {
-            var openDialog = new OpenFileDialog
-            {
-                Title = "WxInjector Library Opener",
-                Filter = "Dynamic Link Library|*.dll"
-            };
+            var openDialog = new OpenFileDialog { Title = "WxInjector Library Opener", Filter = "Dynamic Link Library|*.dll" };
             if (openDialog.ShowDialog() == true)
                 TbLibrary.Text = openDialog.FileName;
         }
 
         private void ProcessSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (LbProcesses.SelectedItem != null)
-            {
-                var item = LbProcesses.SelectedItem as ListBoxItem;
-                TbProcess.Text = item.Content.ToString();
-                _target = int.Parse(item.Tag.ToString());
-            }
+            if (LbProcesses.SelectedItem == null)
+                return;
+            var item = LbProcesses.SelectedItem as ListBoxItem;
+            TbProcess.Text = item.Content.ToString();
+            _target = int.Parse(item.Tag.ToString());
         }
 
         private void Inject(object sender, RoutedEventArgs e)
