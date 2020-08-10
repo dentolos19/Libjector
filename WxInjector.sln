@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30002.166
+VisualStudioVersion = 16.0.30330.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WxInjector", "WxInjector\WxInjector.csproj", "{FBEC15BA-138F-432D-86E6-B2F542FABD2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WxInjector", "WxInjector\WxInjector.csproj", "{284AAA5E-C27A-4F60-AC73-988B741B809F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FBEC15BA-138F-432D-86E6-B2F542FABD2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBEC15BA-138F-432D-86E6-B2F542FABD2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBEC15BA-138F-432D-86E6-B2F542FABD2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBEC15BA-138F-432D-86E6-B2F542FABD2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{284AAA5E-C27A-4F60-AC73-988B741B809F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{284AAA5E-C27A-4F60-AC73-988B741B809F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{284AAA5E-C27A-4F60-AC73-988B741B809F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{284AAA5E-C27A-4F60-AC73-988B741B809F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {8E5D7442-9CF5-47AD-B607-60CDF5973D0D}
+		SolutionGuid = {515473D8-9EC1-43E6-9B81-B6487F3A023E}
 	EndGlobalSection
 EndGlobal

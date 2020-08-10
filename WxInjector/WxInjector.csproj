@@ -2,36 +2,32 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <StartupObject>WxInjector.App</StartupObject>
     <Authors>Dennise Catolos</Authors>
+    <Version>1.3.0</Version>
+    <Company>Aprodots</Company>
     <Copyright>Copyright © 2020</Copyright>
-    <NeutralLanguage>en</NeutralLanguage>
     <SignAssembly>true</SignAssembly>
-	  <Version>1.2.2</Version>
-	  <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
-	  <AssemblyOriginatorKeyFile>Properties\AssemblyKey.snk</AssemblyOriginatorKeyFile>
-	  <Company>Aprodots</Company>
+    <AssemblyOriginatorKeyFile>Properties\AssemblyKey.snk</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>Resources\Assets\Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Properties\PublishProfiles\**" />
-    <EmbeddedResource Remove="Properties\PublishProfiles\**" />
-    <None Remove="Properties\PublishProfiles\**" />
-    <Page Remove="Properties\PublishProfiles\**" />
+    <None Remove="Resources\Assets\Icon.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove=".gitattributes" />
-    <None Remove=".gitignore" />
-    <None Remove="LICENSE" />
-    <None Remove="README.md" />
-    <None Remove="VERSION" />
+    <PackageReference Include="Bleak" Version="3.1.1" />
+    <PackageReference Include="MahApps.Metro" Version="2.2.0" />
+    <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.1.4" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.4.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.4.0" />
   </ItemGroup>
 
-	<ItemGroup>
-    <PackageReference Include="Bleak" Version="3.1.1" />
+  <ItemGroup>
+    <Resource Include="Resources\Assets\Icon.png" />
   </ItemGroup>
 
 </Project>

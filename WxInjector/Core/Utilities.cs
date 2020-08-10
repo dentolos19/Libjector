@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Net;
-using System.Reflection;
-using System.Runtime.InteropServices;
+using System.Windows;
+using ControlzEx.Theming;
 
 namespace WxInjector.Core
 {
@@ -9,20 +8,23 @@ namespace WxInjector.Core
     public static class Utilities
     {
 
-        [DllImport("wininet.dll", SetLastError = true)]
-        private static extern bool InternetGetConnectedState(out int flags, int reserved);
-
-        public static bool IsUserOnline()
+        public static void SetAppTheme(string colorScheme, bool darkMode, bool afterInit = true)
         {
-            return InternetGetConnectedState(out _, 0);
-        }
-
-        public static bool IsUpdateAvailable()
-        {
-            var client = new WebClient();
-            var data = client.DownloadString("https://raw.githubusercontent.com/dentolos19/WxInjector/master/VERSION");
-            client.Dispose();
-            return Version.Parse(data) > Assembly.GetExecutingAssembly().GetName().Version;
+            if (afterInit)
+            {
+                ThemeManager.Current.ChangeThemeColorScheme(Application.Current, colorScheme);
+                ThemeManager.Current.ChangeThemeBaseColor(Application.Current, darkMode ? ThemeManager.BaseColorDarkConst : ThemeManager.BaseColorLightConst);
+            }
+            else
+            {
+                var dictionary = new ResourceDictionary
+                {
+                    Source = darkMode
+                        ? new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.{colorScheme}.xaml")
+                        : new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.{colorScheme}.xaml")
+                };
+                Application.Current.Resources.MergedDictionaries.Add(dictionary);
+            }
         }
 
     }
