@@ -117,15 +117,22 @@ namespace WxInjector.Graphics
             EjectButton.IsEnabled = false;
         }
 
-        private void Add(object sender, RoutedEventArgs args)
+        private async void Add(object sender, RoutedEventArgs args)
         {
             var dialog = new OpenFileDialog { Filter = "Dynamic Link Library|*.dll" };
             if (dialog.ShowDialog() != true)
                 return;
-            var binding = DllFileBinding.Create(dialog.FileName);
-            DllFileList.Items.Add(binding);
-            App.Settings.DllFiles = DllFileList.Items.OfType<DllFileBinding>().ToArray();
-            UpdateDllSelection(null, null);
+            try
+            {
+                var binding = DllFileBinding.Create(dialog.FileName);
+                DllFileList.Items.Add(binding);
+                App.Settings.DllFiles = DllFileList.Items.OfType<DllFileBinding>().ToArray();
+                UpdateDllSelection(null, null);
+            }
+            catch
+            {
+                await this.ShowMessageAsync("Import unsuccessful!", "The file might be invalid or empty.").ConfigureAwait(false);
+            }
         }
 
         private void Remove(object sender, RoutedEventArgs args)

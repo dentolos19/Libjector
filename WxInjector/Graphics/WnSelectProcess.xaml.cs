@@ -38,6 +38,7 @@ namespace WxInjector.Graphics
 
         private void Refresh(object sender, RoutedEventArgs args)
         {
+            ProcessList.Items.Clear();
             foreach (var process in Process.GetProcesses())
             {
                 if (string.IsNullOrEmpty(process.MainWindowTitle))
