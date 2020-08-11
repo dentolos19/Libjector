@@ -55,10 +55,42 @@ namespace WxInjector.Graphics
             try
             {
                 var binding = (DllFileBinding)DllFileList.SelectedItem;
-                _currentInjector = new Injector(_targetProcessId, binding.Path, InjectionMethod.CreateThread);
+                InjectionMethod method;
+                switch (MethodBox.SelectedIndex)
+                {
+                    case 1:
+                        method = InjectionMethod.HijackThread;
+                        break;
+                    case 2:
+                        method = InjectionMethod.ManualMap;
+                        break;
+                    default:
+                        method = InjectionMethod.CreateThread;
+                        break;
+                }
+                InjectionFlags flag;
+                switch (FlagBox.SelectedIndex)
+                {
+                    case 1:
+                        flag = InjectionFlags.HideDllFromPeb;
+                        break;
+                    case 2:
+                        flag = InjectionFlags.RandomiseDllHeaders;
+                        break;
+                    case 3:
+                        flag = InjectionFlags.RandomiseDllName;
+                        break;
+                    default:
+                        flag = InjectionFlags.None;
+                        break;
+                }
+                _currentInjector = new Injector(_targetProcessId, binding.Path, method, flag);
                 _currentInjector.InjectDll();
-                InjectButton.IsEnabled = false;
-                EjectButton.IsEnabled = true;
+                if (flag != InjectionFlags.HideDllFromPeb)
+                {
+                    InjectButton.IsEnabled = false;
+                    EjectButton.IsEnabled = true;
+                }
                 await this.ShowMessageAsync("Injection successful!", "DLL has been injected into process!").ConfigureAwait(false);
             }
             catch
