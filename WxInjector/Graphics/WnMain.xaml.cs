@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,7 +33,7 @@ namespace WxInjector.Graphics
 
         private void ColorSchemeSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
-            App.Settings.ColorScheme = ColorSchemeBox.Text;
+            App.Settings.ColorScheme = (string)((ComboBox)sender).SelectedItem;
             Utilities.SetAppTheme(App.Settings.ColorScheme, true);
             App.Settings.Save();
         }
@@ -44,37 +43,46 @@ namespace WxInjector.Graphics
             Application.Current.Shutdown();
         }
 
-        private void Inject(object sender, RoutedEventArgs args)
+        private async void Inject(object sender, RoutedEventArgs args)
         {
             if (!InjectButton.IsEnabled)
                 return;
             if (DllFileList.SelectedItem == null || _targetProcessId <= 0)
             {
-                this.ShowMessageAsync("Needs additional input!", "Select a DLL and a target process before continuing.");
+                await this.ShowMessageAsync("Needs additional input!", "Select a DLL and a target process before continuing.").ConfigureAwait(false);
                 return;
             }
-            var binding = (DllFileBinding)DllFileList.SelectedItem;
-            _currentInjector = new Injector(_targetProcessId, binding.Path, InjectionMethod.CreateThread);
-            _currentInjector.InjectDll();
-            InjectButton.IsEnabled = false;
-            EjectButton.IsEnabled = true;
-            this.ShowMessageAsync("Injection successful!", "DLL has been injected into process!");
+            try
+            {
+                var binding = (DllFileBinding)DllFileList.SelectedItem;
+                _currentInjector = new Injector(_targetProcessId, binding.Path, InjectionMethod.CreateThread);
+                _currentInjector.InjectDll();
+                InjectButton.IsEnabled = false;
+                EjectButton.IsEnabled = true;
+                await this.ShowMessageAsync("Injection successful!", "DLL has been injected into process!").ConfigureAwait(false);
+            }
+            catch
+            {
+                await this.ShowMessageAsync("Injection unsuccessful!", "DLL has been injected into process! Restart and reselect the target process and try again.").ConfigureAwait(false);
+            }
         }
 
-        private void Eject(object sender, RoutedEventArgs args)
+        private async void Eject(object sender, RoutedEventArgs args)
         {
             if (!EjectButton.IsEnabled)
                 return;
-            if (DllFileList.SelectedItem == null || _targetProcessId <= 0)
+            try
             {
-                this.ShowMessageAsync("Needs additional input!", "Select a DLL and a target process before continuing.");
-                return;
+                _currentInjector.EjectDll();
+                _currentInjector.Dispose();
+                await this.ShowMessageAsync("Ejection successful!", "DLL has been ejected from process!").ConfigureAwait(false);
             }
-            _currentInjector.EjectDll();
-            _currentInjector.Dispose();
+            catch
+            {
+                await this.ShowMessageAsync("Ejection unsuccessful!", "Unable to eject from process!").ConfigureAwait(false);
+            }
             InjectButton.IsEnabled = true;
             EjectButton.IsEnabled = false;
-            this.ShowMessageAsync("Ejection successful!", "DLL has been ejected from process!");
         }
 
         private void Add(object sender, RoutedEventArgs args)
@@ -106,7 +114,7 @@ namespace WxInjector.Graphics
 
         private void SelectProcess(object sender, RoutedEventArgs args)
         {
-            var dialog = new WnSelect { Owner = this };
+            var dialog = new WnSelectProcess { Owner = this };
             if (dialog.ShowDialog() == false)
                 return;
             _targetProcessId = dialog.SelectedProcessId;

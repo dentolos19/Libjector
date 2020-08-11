@@ -18,6 +18,11 @@ namespace WxInjector
             AppCenter.Start("12cb4cef-c869-46d8-86a7-b8d1efe2835e", typeof(Analytics), typeof(Crashes));
             Settings = Configuration.Load();
             Utilities.SetAppTheme(Settings.ColorScheme, true, false);
+            if (!Utilities.IsRunningAsAdministrator())
+            {
+                MessageBox.Show("You need to run this program as administrator to use it!", "WxInjector");
+                Current.Shutdown();
+            }
             new WnMain().Show();
         }
 

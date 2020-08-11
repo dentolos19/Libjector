@@ -1,5 +1,0 @@
-﻿<mahApps:MetroWindow x:Class="WxInjector.Graphics.WnSelect"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls"
-        Title="Select Process" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"/>

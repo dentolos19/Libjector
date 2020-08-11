@@ -1,5 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Windows;
 using ControlzEx.Theming;
 
@@ -8,6 +12,10 @@ namespace WxInjector.Core
 
     internal static class Utilities
     {
+
+        [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IsWow64Process([In] IntPtr process, [Out] out bool wow64Process);
 
         public static void SetAppTheme(string colorScheme, bool darkMode, bool afterInit = true)
         {
@@ -50,6 +58,22 @@ namespace WxInjector.Core
                 default:
                     return "Unspecified";
             }
+        }
+
+        public static bool IsRunningAsAdministrator()
+        {
+            var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        public static string GetProcessArchitecture(Process process)
+        {
+            if (!Environment.Is64BitOperatingSystem)
+                return "32-bit";
+            if (!IsWow64Process(process.Handle, out var result))
+                return "Unknown";
+            return result ? "32-bit" : "64-bit";
         }
 
     }
