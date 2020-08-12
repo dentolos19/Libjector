@@ -8,7 +8,7 @@
             <Image DockPanel.Dock="Left" Source="../Resources/Assets/Icon.png" Width="30" Margin="10,10,0,10"/>
             <Button DockPanel.Dock="Right" Content="Exit" Width="100" Margin="0,10,10,10" Click="Exit"/>
             <ComboBox x:Name="ColorSchemeBox" DockPanel.Dock="Right" Width="150" Margin="0,10,10,10" SelectionChanged="ColorSchemeSelectionChanged"/>
-            <Label Content="WxInjector (Early Access)" VerticalContentAlignment="Center" FontSize="16" Margin="10,0,10,0"/>
+            <Label Content="WxInjector" VerticalContentAlignment="Center" FontSize="16" Margin="10,0,10,0"/>
         </DockPanel>
         <StackPanel DockPanel.Dock="Left" Width="100" Background="#FF444444">
             <Button x:Name="InjectButton" Content="Inject" Margin="10,10,10,0" IsDefault="True" Click="Inject"/>
