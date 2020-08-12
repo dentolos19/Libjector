@@ -55,35 +55,19 @@ namespace WxInjector.Graphics
             try
             {
                 var binding = (DllFileBinding)DllFileList.SelectedItem;
-                InjectionMethod method;
-                switch (MethodBox.SelectedIndex)
+                var method = MethodBox.SelectedIndex switch
                 {
-                    case 1:
-                        method = InjectionMethod.HijackThread;
-                        break;
-                    case 2:
-                        method = InjectionMethod.ManualMap;
-                        break;
-                    default:
-                        method = InjectionMethod.CreateThread;
-                        break;
-                }
-                InjectionFlags flag;
-                switch (FlagBox.SelectedIndex)
+                    1 => InjectionMethod.HijackThread,
+                    2 => InjectionMethod.ManualMap,
+                    _ => InjectionMethod.CreateThread
+                };
+                var flag = FlagBox.SelectedIndex switch
                 {
-                    case 1:
-                        flag = InjectionFlags.HideDllFromPeb;
-                        break;
-                    case 2:
-                        flag = InjectionFlags.RandomiseDllHeaders;
-                        break;
-                    case 3:
-                        flag = InjectionFlags.RandomiseDllName;
-                        break;
-                    default:
-                        flag = InjectionFlags.None;
-                        break;
-                }
+                    1 => InjectionFlags.HideDllFromPeb,
+                    2 => InjectionFlags.RandomiseDllHeaders,
+                    3 => InjectionFlags.RandomiseDllName,
+                    _ => InjectionFlags.None
+                };
                 _currentInjector = new Injector(_targetProcessId, binding.Path, method, flag);
                 _currentInjector.InjectDll();
                 if (flag != InjectionFlags.HideDllFromPeb)
@@ -169,6 +153,14 @@ namespace WxInjector.Graphics
         {
             RemoveButton.IsEnabled = DllFileList.SelectedItem != null;
             ClearButton.IsEnabled = DllFileList.Items.Count > 0;
+        }
+
+        private void CopyDllPath(object sender, RoutedEventArgs args)
+        {
+            var item = (DllFileBinding)DllFileList.SelectedItem;
+            if (item == null)
+                return;
+            Clipboard.SetText(item.Path);
         }
 
     }

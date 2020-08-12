@@ -19,6 +19,12 @@
                     <GridViewColumn Header="Path" Width="300" DisplayMemberBinding="{Binding Path}"/>
                 </GridView>
             </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Copy ID" Click="CopyProcessId"/>
+                    <MenuItem Header="Copy Path" Click="CopyProcessPath"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
         </ListView>
     </DockPanel>
 </mahApps:MetroWindow>

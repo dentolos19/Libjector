@@ -47,6 +47,22 @@ namespace WxInjector.Graphics
             }
         }
 
+        private void CopyProcessId(object sender, RoutedEventArgs args)
+        {
+            var item = (ProcessItemBinding)ProcessList.SelectedItem;
+            if (item == null)
+                return;
+            Clipboard.SetText(item.Id.ToString());
+        }
+
+        private void CopyProcessPath(object sender, RoutedEventArgs args)
+        {
+            var item = (ProcessItemBinding)ProcessList.SelectedItem;
+            if (item == null)
+                return;
+            Clipboard.SetText(item.Path);
+        }
+
     }
 
 }
