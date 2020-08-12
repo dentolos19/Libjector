@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,7 +28,8 @@ namespace WxInjector.Graphics
             if (App.Settings.DllFiles == null)
                 return;
             foreach (var dll in App.Settings.DllFiles)
-                DllFileList.Items.Add(dll);
+                if (File.Exists(dll.Path))
+                    DllFileList.Items.Add(dll);
             UpdateDllSelection(null, null);
         }
 
@@ -70,17 +72,23 @@ namespace WxInjector.Graphics
                 };
                 _currentInjector = new Injector(_targetProcessId, binding.Path, method, flag);
                 _currentInjector.InjectDll();
+                var message = "DLL has been injected into process!";
                 if (flag != InjectionFlags.HideDllFromPeb)
                 {
-                    InjectButton.IsEnabled = false;
-                    EjectButton.IsEnabled = true;
+                    Dispatcher.Invoke(() =>
+                    {
+                        InjectButton.IsEnabled = false;
+                        EjectButton.IsEnabled = true;
+                    });
+                    message += " You can also eject the DLL from the process at will.";
                 }
-                await this.ShowMessageAsync("Injection successful!", "DLL has been injected into process!").ConfigureAwait(false);
+                await this.ShowMessageAsync("Injection successful!", message).ConfigureAwait(false);
             }
             catch
             {
-                await this.ShowMessageAsync("Injection unsuccessful!", "DLL has been injected into process! Restart and reselect the target process and try again.").ConfigureAwait(false);
+                await this.ShowMessageAsync("Injection unsuccessful!", "DLL has been injected into process! The DLL's architecture might not be the same as the target process's architecture. Restart and reselect the target process and try again.").ConfigureAwait(false);
             }
+           
         }
 
         private async void Eject(object sender, RoutedEventArgs args)
@@ -95,22 +103,35 @@ namespace WxInjector.Graphics
             }
             catch
             {
-                await this.ShowMessageAsync("Ejection unsuccessful!", "Unable to eject from process!").ConfigureAwait(false);
+                await this.ShowMessageAsync("Ejection unsuccessful!", "Unable to eject from process! Restart the target process as an alternative.").ConfigureAwait(false);
             }
-            InjectButton.IsEnabled = true;
-            EjectButton.IsEnabled = false;
+            Dispatcher.Invoke(() =>
+            {
+                InjectButton.IsEnabled = true;
+                EjectButton.IsEnabled = false;
+            });
         }
 
         private async void Add(object sender, RoutedEventArgs args)
         {
-            var dialog = new OpenFileDialog { Filter = "Dynamic Link Library|*.dll" };
+            var dialog = new OpenFileDialog { Filter = "Dynamic Link Library|*.dll", Multiselect = true };
             if (dialog.ShowDialog() != true)
                 return;
+            var items = DllFileList.Items.OfType<DllFileBinding>().ToArray();
             try
             {
-                var binding = DllFileBinding.Create(dialog.FileName);
-                DllFileList.Items.Add(binding);
-                App.Settings.DllFiles = DllFileList.Items.OfType<DllFileBinding>().ToArray();
+                foreach (var path in dialog.FileNames)
+                {
+                    var alreadyExisted = false;
+                    foreach (var item in items)
+                        if (item.Path == path)
+                            alreadyExisted = true;
+                    if (alreadyExisted)
+                        continue;
+                    var binding = DllFileBinding.Create(path);
+                    DllFileList.Items.Add(binding);
+                    App.Settings.DllFiles = DllFileList.Items.OfType<DllFileBinding>().ToArray();
+                }
                 UpdateDllSelection(null, null);
             }
             catch
