@@ -1,8 +1,8 @@
-﻿<mahApps:MetroWindow x:Class="WxInjector.Graphics.WnSelectProcess"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls"
-        Title="Select Process" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+﻿<ui:AdonisWindow x:Class="WxInjector.Graphics.WnSelectProcess"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+                 Title="Select Process" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <DockPanel Width="800" Height="400">
         <DockPanel DockPanel.Dock="Bottom" Height="50">
             <Button DockPanel.Dock="Right" Content="Select" Margin="0,10,10,10" Width="100" Click="Select"/>
@@ -27,4 +27,4 @@
             </ListView.ContextMenu>
         </ListView>
     </DockPanel>
-</mahApps:MetroWindow>
+</ui:AdonisWindow>

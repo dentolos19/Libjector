@@ -4,11 +4,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Bleak;
-using ControlzEx.Theming;
-using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
-using WxInjector.Core;
 using WxInjector.Core.Bindings;
+using AdonisMessageBox = AdonisUI.Controls.MessageBox;
 
 namespace WxInjector.Graphics
 {
@@ -22,9 +20,6 @@ namespace WxInjector.Graphics
         public WnMain()
         {
             InitializeComponent();
-            foreach (var color in ThemeManager.Current.ColorSchemes)
-                ColorSchemeBox.Items.Add(color);
-            ColorSchemeBox.Text = App.Settings.ColorScheme;
             if (App.Settings.DllFiles == null)
                 return;
             foreach (var dll in App.Settings.DllFiles)
@@ -33,25 +28,18 @@ namespace WxInjector.Graphics
             UpdateDllSelection(null, null);
         }
 
-        private void ColorSchemeSelectionChanged(object sender, SelectionChangedEventArgs args)
-        {
-            App.Settings.ColorScheme = (string)((ComboBox)sender).SelectedItem;
-            Utilities.SetAppTheme(App.Settings.ColorScheme, true);
-            App.Settings.Save();
-        }
-
         private void Exit(object sender, RoutedEventArgs args)
         {
             Application.Current.Shutdown();
         }
 
-        private async void Inject(object sender, RoutedEventArgs args)
+        private void Inject(object sender, RoutedEventArgs args)
         {
             if (!InjectButton.IsEnabled)
                 return;
             if (DllFileList.SelectedItem == null || _targetProcessId <= 0)
             {
-                await this.ShowMessageAsync("Needs additional input!", "Select a DLL and a target process before continuing.").ConfigureAwait(false);
+                AdonisMessageBox.Show("Select DLL and target process before injecting.", "WxInjector");
                 return;
             }
             try
@@ -82,16 +70,16 @@ namespace WxInjector.Graphics
                     });
                     message += " You can also eject the DLL from the process at will.";
                 }
-                await this.ShowMessageAsync("Injection successful!", message).ConfigureAwait(false);
+                AdonisMessageBox.Show($"Injection successful!\n\n{message}", "WxInjector");
             }
             catch
             {
-                await this.ShowMessageAsync("Injection unsuccessful!", "DLL has been injected into process! The DLL's architecture might not be the same as the target process's architecture. Restart and reselect the target process and try again.").ConfigureAwait(false);
+                AdonisMessageBox.Show("Injection unsuccessful!\n\nDLL has been injected into process! The DLL's architecture might not be the same as the target process's architecture. Restart and reselect the target process and try again.", "WxInjector");
             }
            
         }
 
-        private async void Eject(object sender, RoutedEventArgs args)
+        private void Eject(object sender, RoutedEventArgs args)
         {
             if (!EjectButton.IsEnabled)
                 return;
@@ -99,11 +87,12 @@ namespace WxInjector.Graphics
             {
                 _currentInjector.EjectDll();
                 _currentInjector.Dispose();
-                await this.ShowMessageAsync("Ejection successful!", "DLL has been ejected from process!").ConfigureAwait(false);
+                AdonisMessageBox.Show("DLL has been ejected from process!", "WxInjector");
             }
             catch
             {
-                await this.ShowMessageAsync("Ejection unsuccessful!", "Unable to eject from process! Restart the target process as an alternative.").ConfigureAwait(false);
+                AdonisMessageBox.Show("Unable to eject from process! Restart the target process as an alternative.", "WxInjector");
+                
             }
             Dispatcher.Invoke(() =>
             {
@@ -112,7 +101,7 @@ namespace WxInjector.Graphics
             });
         }
 
-        private async void Add(object sender, RoutedEventArgs args)
+        private void Add(object sender, RoutedEventArgs args)
         {
             var dialog = new OpenFileDialog { Filter = "Dynamic Link Library|*.dll", Multiselect = true };
             if (dialog.ShowDialog() != true)
@@ -136,7 +125,7 @@ namespace WxInjector.Graphics
             }
             catch
             {
-                await this.ShowMessageAsync("Import unsuccessful!", "The file might be invalid or empty.").ConfigureAwait(false);
+                AdonisMessageBox.Show("Import unsuccessful! The file might be invalid or unreadable.", "WxInjector");
             }
         }
 

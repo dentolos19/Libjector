@@ -1,11 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
-using System.Windows;
-using ControlzEx.Theming;
 
 namespace WxInjector.Core
 {
@@ -16,27 +13,6 @@ namespace WxInjector.Core
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool IsWow64Process([In] IntPtr process, [Out] out bool wow64Process);
-
-        public static void SetAppTheme(string colorScheme, bool darkMode, bool afterInit = true)
-        {
-            if (afterInit)
-            {
-                ThemeManager.Current.ChangeThemeColorScheme(Application.Current, colorScheme);
-                ThemeManager.Current.ChangeThemeBaseColor(Application.Current, darkMode 
-                    ? ThemeManager.BaseColorDarkConst 
-                    : ThemeManager.BaseColorLightConst);
-            }
-            else
-            {
-                var dictionary = new ResourceDictionary
-                {
-                    Source = darkMode
-                        ? new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.{colorScheme}.xaml")
-                        : new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.{colorScheme}.xaml")
-                };
-                Application.Current.Resources.MergedDictionaries.Add(dictionary);
-            }
-        }
 
         public static string GetDllArchitecture(string dllPath)
         {

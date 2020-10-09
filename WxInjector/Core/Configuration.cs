@@ -12,7 +12,6 @@ namespace WxInjector.Core
         private static readonly string Source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "WxInjector.cfg");
         private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(Configuration));
 
-        public string ColorScheme { get; set; } = "Cobalt";
         public DllFileBinding[] DllFiles { get; set; }
 
         public void Save()
