@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using WxInjector.Core.Bindings;
+using AdonisMessageBox = AdonisUI.Controls.MessageBox;
 
 namespace WxInjector.Graphics
 {
@@ -17,22 +18,17 @@ namespace WxInjector.Graphics
             Refresh(null, null);
         }
 
-        private void Select(object sender, RoutedEventArgs args)
+        private void Continue(object sender, RoutedEventArgs args)
         {
             var item = (ProcessItemBinding)ProcessList.SelectedItem;
             if (item == null)
             {
-                MessageBox.Show("Select a running process before continuing!", "WxInjector");
+                AdonisMessageBox.Show("Select a process before continuing!", "WxInjector");
                 return;
             }
             SelectedProcessId = item.Id;
             SelectedProcessName = item.Name;
             DialogResult = true;
-            Close();
-        }
-
-        private void Cancel(object sender, RoutedEventArgs args)
-        {
             Close();
         }
 
@@ -55,7 +51,7 @@ namespace WxInjector.Graphics
             Clipboard.SetText(item.Id.ToString());
         }
 
-        private void CopyProcessPath(object sender, RoutedEventArgs args)
+        private void CopyExecutablePath(object sender, RoutedEventArgs args)
         {
             var item = (ProcessItemBinding)ProcessList.SelectedItem;
             if (item == null)

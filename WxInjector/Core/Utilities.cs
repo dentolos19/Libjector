@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Windows;
 
 namespace WxInjector.Core
 {
 
-    internal static class Utilities
+    public static class Utilities
     {
 
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
@@ -24,16 +26,13 @@ namespace WxInjector.Core
             var head = reader.ReadUInt32();
             if (head != 0x00004550)
                 return "Unknown";
-            switch ((ushort)reader.ReadInt16())
+            return (ushort)reader.ReadInt16() switch
             {
-                case 0x8664:
-                case 0x200:
-                    return "64-bit";
-                case 0x14c:
-                    return "32-bit";
-                default:
-                    return "Unspecified";
-            }
+                0x8664 => "64-bit", 
+                0x200 => "64-bit",
+                0x14c => "32-bit",
+                _ => "Unidentified"
+            };
         }
 
         public static bool IsRunningAsAdministrator()
@@ -41,6 +40,15 @@ namespace WxInjector.Core
             var identity = WindowsIdentity.GetCurrent();
             var principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        public static void RestartApp(string args = null)
+        {
+            var location = Assembly.GetExecutingAssembly().Location;
+            if (location.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase))
+                location = Path.Combine(Path.GetDirectoryName(location)!, Path.GetFileNameWithoutExtension(location) + ".exe");
+            Process.Start(location, args ?? string.Empty);
+            Application.Current.Shutdown();
         }
 
         public static string GetProcessArchitecture(Process process)

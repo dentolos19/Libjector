@@ -28,18 +28,23 @@ namespace WxInjector.Graphics
             UpdateDllSelection(null, null);
         }
 
+        private void SaveSettings(object sender, CancelEventArgs args)
+        {
+            App.Settings.Save();
+        }
+
         private void Exit(object sender, RoutedEventArgs args)
         {
             Application.Current.Shutdown();
         }
 
-        private void Inject(object sender, RoutedEventArgs args)
+        private void InjectToProcess(object sender, RoutedEventArgs args)
         {
             if (!InjectButton.IsEnabled)
                 return;
             if (DllFileList.SelectedItem == null || _targetProcessId <= 0)
             {
-                AdonisMessageBox.Show("Select DLL and target process before injecting.", "WxInjector");
+                AdonisMessageBox.Show("Select a DLL and a target process before injecting.", "WxInjector");
                 return;
             }
             try
@@ -79,7 +84,7 @@ namespace WxInjector.Graphics
            
         }
 
-        private void Eject(object sender, RoutedEventArgs args)
+        private void EjectFromProcess(object sender, RoutedEventArgs args)
         {
             if (!EjectButton.IsEnabled)
                 return;
@@ -101,7 +106,7 @@ namespace WxInjector.Graphics
             });
         }
 
-        private void Add(object sender, RoutedEventArgs args)
+        private void ImportDll(object sender, RoutedEventArgs args)
         {
             var dialog = new OpenFileDialog { Filter = "Dynamic Link Library|*.dll", Multiselect = true };
             if (dialog.ShowDialog() != true)
@@ -129,40 +134,27 @@ namespace WxInjector.Graphics
             }
         }
 
-        private void Remove(object sender, RoutedEventArgs args)
+        private void RemoveDlls(object sender, RoutedEventArgs args)
         {
-            if (DllFileList.SelectedItem == null)
-                return;
-            DllFileList.Items.Remove(DllFileList.SelectedItem);
-            App.Settings.DllFiles = DllFileList.Items.OfType<DllFileBinding>().ToArray();
-            UpdateDllSelection(null, null);
-        }
-
-        private void Clear(object sender, RoutedEventArgs args)
-        {
-            DllFileList.Items.Clear();
+            var items = DllFileList.SelectedItems.OfType<DllFileBinding>().ToArray();
+            foreach (var item in items)
+                DllFileList.Items.Remove(item);
             App.Settings.DllFiles = DllFileList.Items.OfType<DllFileBinding>().ToArray();
             UpdateDllSelection(null, null);
         }
 
         private void SelectProcess(object sender, RoutedEventArgs args)
         {
-            var dialog = new WnSelectProcess { Owner = this };
+            var dialog = new WnSelectProcess { Owner = Application.Current.MainWindow };
             if (dialog.ShowDialog() == false)
                 return;
             _targetProcessId = dialog.SelectedProcessId;
             TargetProcessBox.Text = $"{dialog.SelectedProcessName} ({dialog.SelectedProcessId})";
         }
 
-        private void SaveSettings(object sender, CancelEventArgs args)
-        {
-            App.Settings.Save();
-        }
-
         private void UpdateDllSelection(object sender, SelectionChangedEventArgs args)
         {
             RemoveButton.IsEnabled = DllFileList.SelectedItem != null;
-            ClearButton.IsEnabled = DllFileList.Items.Count > 0;
         }
 
         private void CopyDllPath(object sender, RoutedEventArgs args)

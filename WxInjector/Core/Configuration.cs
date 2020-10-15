@@ -9,7 +9,7 @@ namespace WxInjector.Core
     public class Configuration
     {
 
-        private static readonly string Source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "WxInjector.cfg");
+        private static readonly string Source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WxInjector.cfg");
         private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(Configuration));
 
         public DllFileBinding[] DllFiles { get; set; }
