@@ -1,8 +1,21 @@
-# WxInjector
+<h1 align="center">
+  <br>
+    <img src="./.github/icon.png" width="200">
+  <br>
+    WxInjector
+  <br>
+</h1>
+
+<p align="center">
+  <a href="https://dotnet.microsoft.com">
+    <img src="https://img.shields.io/badge/Powered%20By-.NET-blue?logo=microsoft&style=for-the-badge">
+  </a>
+  <a href="https://visualstudio.microsoft.com">
+    <img src="https://img.shields.io/badge/Made%20With-Visual%20Studio-blue?logo=visual-studio&style=for-the-badge">
+  </a>
+</p>
 
 This program injects DLLs into any processes with three special methods and special flags. This program is useful for hackers, developers and cheaters alike. This injector is powered by [Bleak](https://github.com/Akaion/Bleak), which is by now deprecated but it still works without any flaws!
-
-ONE THING THAT YOU SHOULD KNOW: The program uses a lot of memory and requires the [.NET Core 3.1+ Runtime](https://dotnet.microsoft.com/download/dotnet-core) to be installed!
 
 **Features**
 
@@ -27,12 +40,7 @@ ONE THING THAT YOU SHOULD KNOW: The program uses a lot of memory and requires th
 * RandomizeDllHeaders (No Ejection Support)
 * RandomizeDllName
 
-![Preview](https://dentolos19.github.io/previews/wxinjector.png)
+## Screenshots
 
-### Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-### License
-
-This project is licensed with the [MIT License](https://choosealicense.com/licenses/mit).
+![](./.github/screenshots/0.png)
+![](./.github/screenshots/1.png)
