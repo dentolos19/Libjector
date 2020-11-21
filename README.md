@@ -25,7 +25,6 @@ This program injects DLLs into any processes with three special methods and spec
 * Has a variety of injection flags
 * Has a metro interface and it is well-designed (based on my opinion)
 * Can see if process or DLL is 64-bit or 32-bit
-* Auto-reports crashes and analytics directly to me
 * Created entirely in .NET
 
 **Injection Methods**
