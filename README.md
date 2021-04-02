@@ -1,19 +1,17 @@
-<h1 align="center">
-  <br>
-    <img src="./.github/icon.png" width="200">
-  <br>
-    WxInjector
-  <br>
-</h1>
+<div align="center">
 
-<p align="center">
-  <a href="https://dotnet.microsoft.com">
-    <img src="https://img.shields.io/badge/Powered%20By-.NET-blue?logo=microsoft&style=for-the-badge">
-  </a>
-  <a href="https://visualstudio.microsoft.com">
-    <img src="https://img.shields.io/badge/Made%20With-Visual%20Studio-blue?logo=visual-studio&style=for-the-badge">
-  </a>
-</p>
+<img src="./.github/icon.png" width="100"/>
+
+</div>
+
+<h1 align="center">WxInjector</h1>
+
+<div align="center">
+
+[![](https://img.shields.io/badge/Powered%20By-.NET-blue?logo=microsoft&style=flat-square)](https://dotnet.microsoft.com)
+[![](https://img.shields.io/badge/Made%20With-Rider-blue?logo=jetbrains&style=flat-square)](https://www.jetbrains.com/rider)
+
+</div>
 
 This program injects DLLs into any processes with three special methods and special flags. This program is useful for hackers, developers and cheaters alike. This injector is powered by [Bleak](https://github.com/Akaion/Bleak), which is by now deprecated but it still works without any flaws!
 
