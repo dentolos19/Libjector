@@ -10,9 +10,9 @@ namespace WxInjector.Core
     {
 
         private static readonly string Source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WxInjector.cfg");
-        private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(Configuration));
+        private static readonly XmlSerializer Serializer = new(typeof(Configuration));
 
-        public DllFileBinding[] DllFiles { get; set; }
+        public DllFileBinding[]? DllFiles { get; set; }
 
         public void Save()
         {
@@ -25,7 +25,7 @@ namespace WxInjector.Core
             if (!File.Exists(Source))
                 return new Configuration();
             using var stream = new FileStream(Source, FileMode.Open);
-            return (Configuration)Serializer.Deserialize(stream);
+            return (Configuration)Serializer.Deserialize(stream)!;
         }
 
     }

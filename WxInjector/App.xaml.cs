@@ -10,11 +10,10 @@ namespace WxInjector
     public partial class App
     {
 
-        internal static Configuration Settings { get; private set; }
+        internal static Configuration Settings { get; } = Settings = Configuration.Load();
 
         private void InitializeApp(object sender, StartupEventArgs args)
         {
-            Settings = Configuration.Load();
             if (!Utilities.IsRunningAsAdministrator())
             {
                 AdonisMessageBox.Show("You need to run this program as administrator to use it!", "WxInjector");
@@ -24,10 +23,10 @@ namespace WxInjector
             MainWindow.Show();
         }
 
-        private void HandleError(object sender, DispatcherUnhandledExceptionEventArgs args)
+        private void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
         {
             args.Handled = true;
-            new WnErrorHandler(args.Exception).ShowDialog();
+            new WnExceptionHandler(args.Exception).ShowDialog();
         }
 
     }

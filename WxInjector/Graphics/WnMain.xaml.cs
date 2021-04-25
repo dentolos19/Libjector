@@ -14,8 +14,9 @@ namespace WxInjector.Graphics
     public partial class WnMain
     {
 
-        private int _targetProcessId;
         private Injector _currentInjector;
+
+        private int _targetProcessId;
 
         public WnMain()
         {
@@ -25,7 +26,7 @@ namespace WxInjector.Graphics
             foreach (var dll in App.Settings.DllFiles)
                 if (File.Exists(dll.Path))
                     DllFileList.Items.Add(dll);
-            UpdateDllSelection(null, null);
+            UpdateDllSelection(null!, null!);
         }
 
         private void SaveSettings(object sender, CancelEventArgs args)
@@ -81,7 +82,6 @@ namespace WxInjector.Graphics
             {
                 AdonisMessageBox.Show("Injection unsuccessful!\n\nDLL has been injected into process! The DLL's architecture might not be the same as the target process's architecture. Restart and reselect the target process and try again.", "WxInjector");
             }
-           
         }
 
         private void EjectFromProcess(object sender, RoutedEventArgs args)
@@ -97,7 +97,6 @@ namespace WxInjector.Graphics
             catch
             {
                 AdonisMessageBox.Show("Unable to eject from process! Restart the target process as an alternative.", "WxInjector");
-                
             }
             Dispatcher.Invoke(() =>
             {
@@ -126,7 +125,7 @@ namespace WxInjector.Graphics
                     DllFileList.Items.Add(binding);
                     App.Settings.DllFiles = DllFileList.Items.OfType<DllFileBinding>().ToArray();
                 }
-                UpdateDllSelection(null, null);
+                UpdateDllSelection(null!, null!);
             }
             catch
             {
@@ -140,7 +139,7 @@ namespace WxInjector.Graphics
             foreach (var item in items)
                 DllFileList.Items.Remove(item);
             App.Settings.DllFiles = DllFileList.Items.OfType<DllFileBinding>().ToArray();
-            UpdateDllSelection(null, null);
+            UpdateDllSelection(null!, null!);
         }
 
         private void SelectProcess(object sender, RoutedEventArgs args)

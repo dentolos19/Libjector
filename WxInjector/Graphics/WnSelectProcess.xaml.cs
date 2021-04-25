@@ -9,14 +9,14 @@ namespace WxInjector.Graphics
     public partial class WnSelectProcess
     {
 
-        public int SelectedProcessId { get; private set; }
-        public string SelectedProcessName { get; private set; }
-
         public WnSelectProcess()
         {
             InitializeComponent();
             Refresh(null, null);
         }
+
+        public int SelectedProcessId { get; private set; }
+        public string SelectedProcessName { get; private set; }
 
         private void Continue(object sender, RoutedEventArgs args)
         {

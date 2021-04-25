@@ -5,10 +5,10 @@ using WxInjector.Core;
 namespace WxInjector.Graphics
 {
 
-    public partial class WnErrorHandler
+    public partial class WnExceptionHandler
     {
 
-        public WnErrorHandler(Exception error)
+        public WnExceptionHandler(Exception error)
         {
             InitializeComponent();
             MessageText.Text = error.Message;

@@ -28,7 +28,7 @@ namespace WxInjector.Core
                 return "Unknown";
             return (ushort)reader.ReadInt16() switch
             {
-                0x8664 => "64-bit", 
+                0x8664 => "64-bit",
                 0x200 => "64-bit",
                 0x14c => "32-bit",
                 _ => "Unidentified"
@@ -42,7 +42,7 @@ namespace WxInjector.Core
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static void RestartApp(string args = null)
+        public static void RestartApp(string? args = null)
         {
             var location = Assembly.GetExecutingAssembly().Location;
             if (location.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase))

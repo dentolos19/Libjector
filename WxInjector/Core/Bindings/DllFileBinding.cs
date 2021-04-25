@@ -5,14 +5,12 @@
     {
 
         public string Name { get; set; }
-
         public string Architecture { get; set; }
-
         public string Path { get; set; }
 
         public static DllFileBinding Create(string dllPath)
         {
-            return new DllFileBinding
+            return new()
             {
                 Path = dllPath,
                 Name = System.IO.Path.GetFileName(dllPath),
