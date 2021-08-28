@@ -1,8 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
+using DentoInjector.Core;
 using DentoInjector.Graphics;
-using WxInjector.Core;
-using WxInjector.Graphics;
 using AdonisMessageBox = AdonisUI.Controls.MessageBox;
 
 namespace DentoInjector
@@ -17,7 +16,7 @@ namespace DentoInjector
         {
             if (!Utilities.IsRunningAsAdministrator())
             {
-                AdonisMessageBox.Show("You need to run this program as administrator to use it!", "WxInjector");
+                AdonisMessageBox.Show("You need to run this program as administrator to use it!", "DentoInjector");
                 Current.Shutdown();
             }
             MainWindow = new WnMain();

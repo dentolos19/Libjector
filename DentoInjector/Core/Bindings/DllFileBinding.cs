@@ -1,4 +1,4 @@
-﻿namespace WxInjector.Core.Bindings
+﻿namespace DentoInjector.Core.Bindings
 {
 
     public class DllFileBinding

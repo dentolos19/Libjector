@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
-using WxInjector.Core;
+using DentoInjector.Core;
 
-namespace WxInjector.Graphics
+namespace DentoInjector.Graphics
 {
 
     public partial class WnExceptionHandler

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Windows;
 
-namespace WxInjector.Core
+namespace DentoInjector.Core
 {
 
     public static class Utilities

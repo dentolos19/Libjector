@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace WxInjector.Core.Bindings
+namespace DentoInjector.Core.Bindings
 {
 
     public class ProcessItemBinding

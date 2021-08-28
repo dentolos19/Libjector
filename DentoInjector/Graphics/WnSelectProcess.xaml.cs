@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Windows;
-using WxInjector.Core.Bindings;
+using DentoInjector.Core.Bindings;
 using AdonisMessageBox = AdonisUI.Controls.MessageBox;
 
-namespace WxInjector.Graphics
+namespace DentoInjector.Graphics
 {
 
     public partial class WnSelectProcess
@@ -23,7 +23,7 @@ namespace WxInjector.Graphics
             var item = (ProcessItemBinding)ProcessList.SelectedItem;
             if (item == null)
             {
-                AdonisMessageBox.Show("Select a process before continuing!", "WxInjector");
+                AdonisMessageBox.Show("Select a process before continuing!", "DentoInjector");
                 return;
             }
             SelectedProcessId = item.Id;

@@ -4,9 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Bleak;
+using DentoInjector.Core.Bindings;
 using Microsoft.Win32;
-using WxInjector.Core.Bindings;
-using WxInjector.Graphics;
 using AdonisMessageBox = AdonisUI.Controls.MessageBox;
 
 namespace DentoInjector.Graphics
@@ -46,7 +45,7 @@ namespace DentoInjector.Graphics
                 return;
             if (DllFileList.SelectedItem == null || _targetProcessId <= 0)
             {
-                AdonisMessageBox.Show("Select a DLL and a target process before injecting.", "WxInjector");
+                AdonisMessageBox.Show("Select a DLL and a target process before injecting.", "DentoInjector");
                 return;
             }
             try
@@ -77,11 +76,11 @@ namespace DentoInjector.Graphics
                     });
                     message += " You can also eject the DLL from the process at will.";
                 }
-                AdonisMessageBox.Show($"Injection successful!\n\n{message}", "WxInjector");
+                AdonisMessageBox.Show($"Injection successful!\n\n{message}", "DentoInjector");
             }
             catch
             {
-                AdonisMessageBox.Show("Injection unsuccessful!\n\nDLL has been injected into process! The DLL's architecture might not be the same as the target process's architecture. Restart and reselect the target process and try again.", "WxInjector");
+                AdonisMessageBox.Show("Injection unsuccessful!\n\nDLL has been injected into process! The DLL's architecture might not be the same as the target process's architecture. Restart and reselect the target process and try again.", "DentoInjector");
             }
         }
 
@@ -93,11 +92,11 @@ namespace DentoInjector.Graphics
             {
                 _currentInjector.EjectDll();
                 _currentInjector.Dispose();
-                AdonisMessageBox.Show("DLL has been ejected from process!", "WxInjector");
+                AdonisMessageBox.Show("DLL has been ejected from process!", "DentoInjector");
             }
             catch
             {
-                AdonisMessageBox.Show("Unable to eject from process! Restart the target process as an alternative.", "WxInjector");
+                AdonisMessageBox.Show("Unable to eject from process! Restart the target process as an alternative.", "DentoInjector");
             }
             Dispatcher.Invoke(() =>
             {
@@ -130,7 +129,7 @@ namespace DentoInjector.Graphics
             }
             catch
             {
-                AdonisMessageBox.Show("Import unsuccessful! The file might be invalid or unreadable.", "WxInjector");
+                AdonisMessageBox.Show("Import unsuccessful! The file might be invalid or unreadable.", "DentoInjector");
             }
         }
 
