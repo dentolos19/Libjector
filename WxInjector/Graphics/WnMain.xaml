@@ -1,9 +1,9 @@
-﻿<ui:AdonisWindow x:Class="WxInjector.Graphics.WnMain"
+﻿<ui:AdonisWindow x:Class="DentoInjector.Graphics.WnMain"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:ui="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
                  xmlns:ext="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
-                 Title="WxInjector" MinWidth="800" MinHeight="500" WindowStartupLocation="CenterScreen" Closing="SaveSettings">
+                 Title="DentoInjector" MinWidth="800" MinHeight="500" WindowStartupLocation="CenterScreen" Closing="SaveSettings">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" Height="50">
             <Image DockPanel.Dock="Left" Source="{StaticResource ResourceKey=ImgIcon}" Width="30" Margin="10,10,0,10"/>

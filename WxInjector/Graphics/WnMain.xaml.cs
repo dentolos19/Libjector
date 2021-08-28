@@ -6,9 +6,10 @@ using System.Windows.Controls;
 using Bleak;
 using Microsoft.Win32;
 using WxInjector.Core.Bindings;
+using WxInjector.Graphics;
 using AdonisMessageBox = AdonisUI.Controls.MessageBox;
 
-namespace WxInjector.Graphics
+namespace DentoInjector.Graphics
 {
 
     public partial class WnMain

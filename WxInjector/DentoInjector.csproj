@@ -4,7 +4,6 @@
 
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net5.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 
 		<ApplicationIcon>Resources\Icon.ico</ApplicationIcon>

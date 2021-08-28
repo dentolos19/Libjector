@@ -1,10 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
+using DentoInjector.Graphics;
 using WxInjector.Core;
 using WxInjector.Graphics;
 using AdonisMessageBox = AdonisUI.Controls.MessageBox;
 
-namespace WxInjector
+namespace DentoInjector
 {
 
     public partial class App
