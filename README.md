@@ -24,7 +24,3 @@ DentoInjector is a simple DLL injector! This project was made with a learning in
 
 ![](./.github/screenshots/0.png)
 ![](./.github/screenshots/1.png)
-
-## Usage
-
-This project is deprecated.
