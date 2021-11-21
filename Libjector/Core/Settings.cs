@@ -7,9 +7,13 @@ namespace Libjector.Core;
 public class Settings
 {
 
-    private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libjector.settings");
+    private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libjector.settings.json");
 
-    public string[] LibraryPaths { get; set; } = Array.Empty<string>();
+    public string[] SavedDllPaths { get; set; } = Array.Empty<string>();
+    public int SavedMethodIndex { get; set; }
+    public bool SavedHideDllFlagChecked { get; set; }
+    public bool SavedRandomizeHeaderFlagChecked { get; set; }
+    public bool SavedRandomizeNameFlagChecked { get; set; } = true;
 
     public void Save()
     {

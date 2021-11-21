@@ -5,27 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Libjector.ViewModels"
         mc:Ignorable="d"
-        Title="Libjector" Width="400" SizeToContent="Height" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Initialized="OnInitialized">
+        Title="Libjector" Width="500" SizeToContent="Height" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Initialized="OnInitialized" Closing="OnClosing">
     <Window.DataContext>
         <vm:MainWindowModel/>
     </Window.DataContext>
     <StackPanel Margin="10,5">
-        <Grid Margin="0,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBox x:Name="ProcessBox" Grid.Column="0" IsReadOnly="True"/>
-            <Button Grid.Column="2" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnSelectProcess">Select</Button>
-        </Grid>
+        <StackPanel Margin="0,5">
+            <TextBlock Text="Target Process" Margin="0,0,0,2"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="ProcessBox" Grid.Column="0" IsReadOnly="True"/>
+                <Button Grid.Column="2" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnSelectProcess">Select Process</Button>
+            </Grid>
+        </StackPanel>
         <Grid Margin="0,5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" MinHeight="200"/>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="LibraryList" Grid.Row="0" ItemsSource="{Binding Path=LibraryList}" IsEnabled="{Binding Path=IsInjectionMode}">
+            <ListView x:Name="DllList" Grid.Row="0" ItemsSource="{Binding Path=DllList}" IsEnabled="{Binding Path=IsInjectionMode}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}"/>
@@ -42,11 +45,35 @@
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnAddLibraries">Add</Button>
-                <Button Grid.Column="2" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnRemoveLibrary">Remove</Button>
-                <Button Grid.Column="4" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnClearLibraries">Clear</Button>
+                <Button Grid.Column="0" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnAddDlls">Add DLL(s)</Button>
+                <Button Grid.Column="2" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnRemoveDll">Remove DLL</Button>
+                <Button Grid.Column="4" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnRemoveAllDlls">Remove All DLLs</Button>
             </Grid>
         </Grid>
-        <Button x:Name="InjectButton" Margin="0,5" Click="OnInject">Inject</Button>
+        <Grid Margin="0,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ComboBox x:Name="MethodBox" Grid.Row="0" SelectedIndex="0">
+                <ComboBoxItem>Create Thread </ComboBoxItem>
+                <ComboBoxItem>Hijack Thread</ComboBoxItem>
+                <ComboBoxItem>Manual Map</ComboBoxItem>
+            </ComboBox>
+            <StackPanel Grid.Row="2" Margin="0,-1">
+                <StackPanel.Resources>
+                    <Style TargetType="CheckBox">
+                        <Setter Property="Margin" Value="0,1"/>
+                    </Style>
+                </StackPanel.Resources>
+                <CheckBox x:Name="HideDllOption" IsEnabled="{Binding Path=IsInjectionMode}">Hide DLL From Process Environment Block (No Ejection Support)</CheckBox>
+                <CheckBox x:Name="RandomizeHeaderOption" IsEnabled="{Binding Path=IsInjectionMode}">Randomize DLL Header After Injection</CheckBox>
+                <CheckBox x:Name="RandomizeNameOption" IsEnabled="{Binding Path=IsInjectionMode}">Randomize DLL Name Before Injection</CheckBox>
+            </StackPanel>
+            <Button x:Name="InjectButton" Grid.Row="4" Click="OnInject">Inject</Button>
+        </Grid>
     </StackPanel>
 </Window>

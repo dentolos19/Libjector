@@ -22,7 +22,7 @@ public static class Utilities
         return result ? "32-bit" : "64-bit";
     }
 
-    public static string GetLibraryArchitecture(string libraryPath)
+    public static string GetDllArchitecture(string libraryPath)
     {
         using var stream = new FileStream(libraryPath, FileMode.Open, FileAccess.Read);
         using var reader = new BinaryReader(stream);

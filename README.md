@@ -5,12 +5,21 @@
 
 A very simple and easy-to-use DLL injector!
 
+This injector is powered by [Bleak](https://github.com/Akaion/Bleak) which is by now deprecated and is no longer being maintained by the [original owner](https://github.com/Akaion), however, it still works properly as intended.
+
 ## Features
 
 * [X] Supports WoW64 and x64 injection
-* [X] Supports ejection from process
-* [X] Able to identify if a process or a library is 64-bit or 32-bit
-* [X] A very simple user interface
+* [X] Supports multiple injection methods
+  * [X] Create Thread: Creates a new thread in the process and uses it to load a DLL
+  * [X] Hijack Thread: Hiheaks an existing thread in the process and forces it to load a DLL
+  * [X] Manual Map: Manually emulates part of the Windows loader to map the DLL into the process
+* [X] Supports useful injection flags (for preventing detection by parent process)
+  * [X] Hide DLL from [Process Environment Block](https://wikipedia.org/wiki/Process_Environment_Block)
+  * [X] Randomize DLL header
+  * [X] Randomize DLL name
+* [X] Simplistic user interface for easy use
+* [X] Able to determine the architecture of a process or a DLL
 
 ## Screenshots
 

@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using Libjector.Core.Bindings;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Libjector.Core.Bindings;
 
 namespace Libjector.ViewModels;
 
@@ -9,7 +9,7 @@ public class MainWindowModel : INotifyPropertyChanged
 {
 
     private bool _isInjectionMode = true;
-    private ObservableCollection<LibraryItemBinding> _libraryList = new();
+    private ObservableCollection<DllItemBinding> _dllList = new();
 
     public bool IsInjectionMode
     {
@@ -21,12 +21,12 @@ public class MainWindowModel : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<LibraryItemBinding> LibraryList
+    public ObservableCollection<DllItemBinding> DllList
     {
-        get => _libraryList;
+        get => _dllList;
         set
         {
-            _libraryList = value;
+            _dllList = value;
             OnPropertyChanged();
         }
     }

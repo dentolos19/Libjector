@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Windows;
-using Bleak;
+﻿using Bleak;
 using Libjector.Core;
 using Libjector.Core.Bindings;
 using Libjector.ViewModels;
 using Libjector.Views;
 using Microsoft.Win32;
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Windows;
 
 namespace Libjector;
 
@@ -26,23 +26,21 @@ public partial class MainWindow
         InitializeComponent();
     }
 
-    private void UpdateLibraryPaths()
-    {
-        App.Settings.LibraryPaths = ViewModel.LibraryList.Select(libraryItem => libraryItem.Path).ToArray();
-        App.Settings.Save();
-    }
-
     private void OnInitialized(object sender, EventArgs args)
     {
-        foreach (var libraryPath in App.Settings.LibraryPaths)
+        foreach (var libraryPath in App.Settings.SavedDllPaths)
         {
-            ViewModel.LibraryList.Add(new LibraryItemBinding
+            ViewModel.DllList.Add(new DllItemBinding
             {
                 Name = Path.GetFileName(libraryPath),
-                Architecture = Utilities.GetLibraryArchitecture(libraryPath),
+                Architecture = Utilities.GetDllArchitecture(libraryPath),
                 Path = libraryPath
             });
         }
+        MethodBox.SelectedIndex = App.Settings.SavedMethodIndex;
+        HideDllOption.IsChecked = App.Settings.SavedHideDllFlagChecked;
+        RandomizeHeaderOption.IsChecked = App.Settings.SavedRandomizeHeaderFlagChecked;
+        RandomizeNameOption.IsChecked = App.Settings.SavedRandomizeNameFlagChecked;
     }
 
     private void OnSelectProcess(object sender, RoutedEventArgs args)
@@ -54,43 +52,40 @@ public partial class MainWindow
         ProcessBox.Text = $"{Path.GetFileName(_targetProcess.MainModule.FileName)} ({_targetProcess.Id})";
     }
 
-    private void OnAddLibraries(object sender, RoutedEventArgs args)
+    private void OnAddDlls(object sender, RoutedEventArgs args)
     {
         var dialog = new OpenFileDialog { Filter = "Dynamic Link Library (*.dll)|*.dll", Multiselect = true };
         if (dialog.ShowDialog() != true)
             return;
         foreach (var filePath in dialog.FileNames)
         {
-            var item = new LibraryItemBinding
+            var item = new DllItemBinding
             {
                 Name = Path.GetFileName(filePath),
-                Architecture = Utilities.GetLibraryArchitecture(filePath),
+                Architecture = Utilities.GetDllArchitecture(filePath),
                 Path = filePath
             };
-            if (!ViewModel.LibraryList.Contains(item))
-                ViewModel.LibraryList.Add(item);
+            if (!ViewModel.DllList.Contains(item))
+                ViewModel.DllList.Add(item);
         }
-        UpdateLibraryPaths();
     }
 
-    private void OnRemoveLibrary(object sender, RoutedEventArgs args)
+    private void OnRemoveDll(object sender, RoutedEventArgs args)
     {
-        if (LibraryList.SelectedItem is not LibraryItemBinding item)
+        if (DllList.SelectedItem is not DllItemBinding item)
             return;
         if (MessageBox.Show("Are you sure you want to remove this library?", "Libjector", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             return;
-        ViewModel.LibraryList.Remove(item);
-        UpdateLibraryPaths();
+        ViewModel.DllList.Remove(item);
     }
 
-    private void OnClearLibraries(object sender, RoutedEventArgs args)
+    private void OnRemoveAllDlls(object sender, RoutedEventArgs args)
     {
-        if (!(LibraryList.Items.Count > 0))
+        if (!(DllList.Items.Count > 0))
             return;
-        if (MessageBox.Show("Are you sure you want to clear all libraries?", "Libjector", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+        if (MessageBox.Show("Are you sure you want to remove all libraries?", "Libjector", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             return;
-        ViewModel.LibraryList.Clear();
-        UpdateLibraryPaths();
+        ViewModel.DllList.Clear();
     }
 
     private void OnInject(object sender, RoutedEventArgs args)
@@ -99,26 +94,47 @@ public partial class MainWindow
         {
             if (!Utilities.IsRunningAsAdministrator())
             {
-                MessageBox.Show("Administrative privileges is required in order to inject a library into a process.", "Libjector");
+                MessageBox.Show("Administrative privileges is required in order to inject a library into a process!", "Libjector");
                 return;
             }
             if (_targetProcess is null)
             {
-                MessageBox.Show("Select a target process before continuing.", "Libjector");
+                MessageBox.Show("Select a target process before continuing!", "Libjector");
                 return;
             }
-            if (LibraryList.SelectedItem is not LibraryItemBinding libraryItem)
+            if (DllList.SelectedItem is not DllItemBinding libraryItem)
             {
-                MessageBox.Show("Select a library before continuing.", "Libjector");
+                MessageBox.Show("Select a DLL before continuing!", "Libjector");
                 return;
             }
             try
             {
+                var flags = InjectionFlags.None;
+                if (HideDllOption.IsChecked == true)
+                    flags |= InjectionFlags.HideDllFromPeb;
+                if (RandomizeHeaderOption.IsChecked == true)
+                    flags |= InjectionFlags.RandomiseDllHeaders;
+                if (RandomizeNameOption.IsChecked == true)
+                    flags |= InjectionFlags.RandomiseDllName;
+                var method = MethodBox.SelectedIndex switch
+                {
+                    1 => InjectionMethod.HijackThread,
+                    2 => InjectionMethod.ManualMap,
+                    _ => InjectionMethod.CreateThread
+                };
                 _injectorService?.Dispose();
-                _injectorService = new Injector(_targetProcess.Id, libraryItem.Path, InjectionMethod.CreateThread);
+                _injectorService = new Injector(_targetProcess.Id, libraryItem.Path, method, flags);
                 _injectorService.InjectDll();
-                InjectButton.Content = "Eject";
-                ViewModel.IsInjectionMode = false;
+                if (flags.HasFlag(InjectionFlags.HideDllFromPeb))
+                {
+                    _injectorService.Dispose();
+                }
+                else
+                {
+                    InjectButton.Content = "Eject";
+                    ViewModel.IsInjectionMode = false;
+                }
+                MessageBox.Show("The DLL has been injected into the process!", "Libjector");
             }
             catch (Exception exception)
             {
@@ -136,12 +152,23 @@ public partial class MainWindow
                 }
                 InjectButton.Content = "Inject";
                 ViewModel.IsInjectionMode = true;
+                MessageBox.Show("The DLL has been ejected from the process!", "Libjector");
             }
             catch (Exception exception)
             {
                 MessageBox.Show($"An error occurred while ejecting: {exception.Message}", "Libjector");
             }
         }
+    }
+
+    private void OnClosing(object sender, CancelEventArgs args)
+    {
+        App.Settings.SavedDllPaths = ViewModel.DllList.Select(libraryItem => libraryItem.Path).ToArray();
+        App.Settings.SavedMethodIndex = MethodBox.SelectedIndex;
+        App.Settings.SavedHideDllFlagChecked = HideDllOption.IsChecked == true;
+        App.Settings.SavedRandomizeHeaderFlagChecked = RandomizeHeaderOption.IsChecked == true;
+        App.Settings.SavedRandomizeNameFlagChecked = RandomizeNameOption.IsChecked == true;
+        App.Settings.Save();
     }
 
 }

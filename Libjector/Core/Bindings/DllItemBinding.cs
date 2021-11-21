@@ -1,6 +1,6 @@
 ﻿namespace Libjector.Core.Bindings;
 
-public record LibraryItemBinding
+public record DllItemBinding
 {
 
     public string Name { get; init; }

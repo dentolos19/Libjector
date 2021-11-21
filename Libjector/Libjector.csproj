@@ -9,11 +9,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="Resources\Icon.ico" />
+		<PackageReference Include="Bleak" Version="3.1.1"/>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Bleak" Version="3.1.1" />
+		<Content Include="Resources\Icon.ico"/>
 	</ItemGroup>
 
 </Project>
