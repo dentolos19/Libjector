@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using Bleak;
 using Libjector.Core;
@@ -17,14 +19,30 @@ public partial class MainWindow
     private Process? _targetProcess;
     private Injector? _injectorService;
 
+    private MainWindowModel ViewModel => (MainWindowModel)DataContext;
+
     public MainWindow()
     {
         InitializeComponent();
     }
 
+    private void UpdateLibraryPaths()
+    {
+        App.Settings.LibraryPaths = ViewModel.LibraryList.Select(libraryItem => libraryItem.Path).ToArray();
+        App.Settings.Save();
+    }
+
     private void OnInitialized(object sender, EventArgs args)
     {
-        // TODO: load previously added libraries
+        foreach (var libraryPath in App.Settings.LibraryPaths)
+        {
+            ViewModel.LibraryList.Add(new LibraryItemBinding
+            {
+                Name = Path.GetFileName(libraryPath),
+                Architecture = Utilities.GetLibraryArchitecture(libraryPath),
+                Path = libraryPath
+            });
+        }
     }
 
     private void OnSelectProcess(object sender, RoutedEventArgs args)
@@ -49,9 +67,10 @@ public partial class MainWindow
                 Architecture = Utilities.GetLibraryArchitecture(filePath),
                 Path = filePath
             };
-            if (!LibraryList.Items.Contains(item))
-                LibraryList.Items.Add(item);
+            if (!ViewModel.LibraryList.Contains(item))
+                ViewModel.LibraryList.Add(item);
         }
+        UpdateLibraryPaths();
     }
 
     private void OnRemoveLibrary(object sender, RoutedEventArgs args)
@@ -60,7 +79,8 @@ public partial class MainWindow
             return;
         if (MessageBox.Show("Are you sure you want to remove this library?", "Libjector", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             return;
-        LibraryList.Items.Remove(item);
+        ViewModel.LibraryList.Remove(item);
+        UpdateLibraryPaths();
     }
 
     private void OnClearLibraries(object sender, RoutedEventArgs args)
@@ -69,22 +89,27 @@ public partial class MainWindow
             return;
         if (MessageBox.Show("Are you sure you want to clear all libraries?", "Libjector", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             return;
-        LibraryList.Items.Clear();
+        ViewModel.LibraryList.Clear();
+        UpdateLibraryPaths();
     }
 
     private void OnInject(object sender, RoutedEventArgs args)
     {
-        var viewModel = (MainWindowModel)DataContext;
-        if (viewModel.IsInjectionMode)
+        if (ViewModel.IsInjectionMode)
         {
+            if (!Utilities.IsRunningAsAdministrator())
+            {
+                MessageBox.Show("Administrative privileges is required in order to inject a library into a process.", "Libjector");
+                return;
+            }
             if (_targetProcess is null)
             {
-                MessageBox.Show("Please select a target process.", "Libjector");
+                MessageBox.Show("Select a target process before continuing.", "Libjector");
                 return;
             }
             if (LibraryList.SelectedItem is not LibraryItemBinding libraryItem)
             {
-                MessageBox.Show("Please select a library.", "Libjector");
+                MessageBox.Show("Select a library before continuing.", "Libjector");
                 return;
             }
             try
@@ -93,7 +118,7 @@ public partial class MainWindow
                 _injectorService = new Injector(_targetProcess.Id, libraryItem.Path, InjectionMethod.CreateThread);
                 _injectorService.InjectDll();
                 InjectButton.Content = "Eject";
-                viewModel.IsInjectionMode = false;
+                ViewModel.IsInjectionMode = false;
             }
             catch (Exception exception)
             {
@@ -110,7 +135,7 @@ public partial class MainWindow
                     _injectorService.Dispose();
                 }
                 InjectButton.Content = "Inject";
-                viewModel.IsInjectionMode = true;
+                ViewModel.IsInjectionMode = true;
             }
             catch (Exception exception)
             {

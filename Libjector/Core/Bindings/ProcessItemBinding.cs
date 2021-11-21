@@ -9,6 +9,6 @@ public record ProcessItemBinding
     public string Name { get; init; }
     public string Architecture { get; init; }
     public string Path { get; init; }
-    public Process Process { get; init; }
+    public Process Source { get; init; }
 
 }

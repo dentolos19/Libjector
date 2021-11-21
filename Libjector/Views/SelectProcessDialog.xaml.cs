@@ -11,7 +11,7 @@ namespace Libjector.Views;
 public partial class SelectProcessDialog
 {
 
-    public Process SelectedProcess { get; private set; }
+    public Process? SelectedProcess { get; private set; }
 
     public SelectProcessDialog()
     {
@@ -23,7 +23,7 @@ public partial class SelectProcessDialog
         var processes = Process.GetProcesses();
         foreach (var process in processes)
         {
-            if (string.IsNullOrEmpty(process.MainWindowTitle))
+            if (process.MainWindowHandle == IntPtr.Zero)
                 continue;
             ProcessList.Items.Add(new ProcessItemBinding
             {
@@ -31,7 +31,7 @@ public partial class SelectProcessDialog
                 Name = Path.GetFileName(process.MainModule.FileName ?? "Unidentified Process"),
                 Architecture = Utilities.GetProcessArchitecture(process),
                 Path = process.MainModule.FileName ?? string.Empty,
-                Process = process
+                Source = process
             });
         }
     }
@@ -40,7 +40,7 @@ public partial class SelectProcessDialog
     {
         if (ProcessList.SelectedItem is not ProcessItemBinding item)
             return;
-        ProcessBox.Text = $"{Path.GetFileName(item.Process.MainModule.FileName)} ({item.Process.Id})";
+        ProcessBox.Text = $"{Path.GetFileName(item.Source.MainModule.FileName)} ({item.Source.Id})";
     }
 
     private void OnProcessSelected(object sender, MouseButtonEventArgs args)
@@ -53,7 +53,7 @@ public partial class SelectProcessDialog
     {
         if (ProcessList.SelectedItem is not ProcessItemBinding item)
             return;
-        SelectedProcess = item.Process;
+        SelectedProcess = item.Source;
         DialogResult = true;
         Close();
     }

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 
 namespace Libjector.Core;
 
@@ -38,6 +39,11 @@ public static class Utilities
             0x14c => "32-bit",
             _ => "Unknown Architecture"
         };
+    }
+
+    public static bool IsRunningAsAdministrator()
+    {
+        return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
     }
 
 }

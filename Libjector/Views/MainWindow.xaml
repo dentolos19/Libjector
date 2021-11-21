@@ -25,7 +25,7 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="LibraryList" Grid.Row="0" IsEnabled="{Binding Path=IsInjectionMode}">
+            <ListView x:Name="LibraryList" Grid.Row="0" ItemsSource="{Binding Path=LibraryList}" IsEnabled="{Binding Path=IsInjectionMode}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}"/>

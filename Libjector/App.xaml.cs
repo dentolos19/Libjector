@@ -1,13 +1,10 @@
-﻿using System.Windows;
+﻿using Libjector.Core;
 
 namespace Libjector;
 
 public partial class App
 {
 
-    private void OnStartup(object sender, StartupEventArgs args)
-    {
-        new MainWindow().Show();
-    }
+    public static Settings Settings { get; } = Settings.Load();
 
 }
