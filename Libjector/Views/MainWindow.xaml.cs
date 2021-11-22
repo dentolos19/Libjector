@@ -45,7 +45,7 @@ public partial class MainWindow
 
     private void OnSelectProcess(object sender, RoutedEventArgs args)
     {
-        var dialog = new SelectProcessDialog { Owner = this };
+        var dialog = new SelectProcessWindow { Owner = this };
         if (dialog.ShowDialog() != true)
             return;
         _targetProcess = dialog.SelectedProcess;

@@ -1,17 +1,24 @@
-﻿<Window x:Class="Libjector.Views.SelectProcessDialog"
+﻿<Window x:Class="Libjector.Views.SelectProcessWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Libjector.ViewModels"
         mc:Ignorable="d"
         Title="Select Process" Width="300" SizeToContent="Height" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Initialized="OnInitialized">
+    <Window.DataContext>
+        <vm:SelectProcessWindowModel/>
+    </Window.DataContext>
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="*" MinHeight="200"/>
             <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListView x:Name="ProcessList" Grid.Row="0" SelectionChanged="OnProcessSelect" MouseDoubleClick="OnProcessSelected">
+        <TextBox x:Name="FilterBox" Grid.Row="0" TextChanged="OnProcessFilter"/>
+        <ListView x:Name="ProcessList" Grid.Row="2" ItemsSource="{Binding Path=ProcessList}" SelectionChanged="OnProcessSelect" MouseDoubleClick="OnProcessSelected">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=Id}"/>
@@ -21,7 +28,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>

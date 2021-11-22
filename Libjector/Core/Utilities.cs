@@ -31,7 +31,7 @@ public static class Utilities
         stream.Seek(offset, SeekOrigin.Begin);
         var head = reader.ReadUInt32();
         if (head != 0x00004550)
-            return "Unknown";
+            return "Unknown Architecture";
         return (ushort)reader.ReadInt16() switch
         {
             0x8664 => "64-bit",

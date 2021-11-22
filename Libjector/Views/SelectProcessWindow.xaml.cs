@@ -4,18 +4,35 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using Libjector.ViewModels;
 
 namespace Libjector.Views;
 
-public partial class SelectProcessDialog
+public partial class SelectProcessWindow
 {
+
+    private SelectProcessWindowModel ViewModel => (SelectProcessWindowModel)DataContext;
 
     public Process? SelectedProcess { get; private set; }
 
-    public SelectProcessDialog()
+    public SelectProcessWindow()
     {
         InitializeComponent();
+        ((CollectionView)CollectionViewSource.GetDefaultView(ProcessList.ItemsSource)).Filter = FilterProcesses;
+    }
+
+    private bool FilterProcesses(object item)
+    {
+        var filterText = FilterBox.Text;
+        if (string.IsNullOrEmpty(filterText))
+            return true; // does not filter item
+        if (item is not ProcessItemBinding processItem)
+            return false; // filter item
+        return processItem.Id.ToString().Contains(filterText, StringComparison.OrdinalIgnoreCase)
+               || processItem.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase);
     }
 
     private void OnInitialized(object sender, EventArgs args)
@@ -25,7 +42,7 @@ public partial class SelectProcessDialog
         {
             if (process.MainWindowHandle == IntPtr.Zero)
                 continue;
-            ProcessList.Items.Add(new ProcessItemBinding
+            ViewModel.ProcessList.Add(new ProcessItemBinding
             {
                 Id = process.Id,
                 Name = Path.GetFileName(process.MainModule.FileName ?? "Unidentified Process"),
@@ -34,6 +51,11 @@ public partial class SelectProcessDialog
                 Source = process
             });
         }
+    }
+
+    private void OnProcessFilter(object sender, TextChangedEventArgs args)
+    {
+        CollectionViewSource.GetDefaultView(ProcessList.ItemsSource).Refresh();
     }
 
     private void OnProcessSelect(object sender, RoutedEventArgs args)
