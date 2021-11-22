@@ -1,6 +1,7 @@
 ﻿using Libjector.Core;
 using Libjector.Core.Bindings;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -16,7 +17,7 @@ public partial class SelectProcessWindow
 
     private SelectProcessWindowModel ViewModel => (SelectProcessWindowModel)DataContext;
 
-    public Process? SelectedProcess { get; private set; }
+    public KeyValuePair<int, string> SelectedProcess { get; private set; }
 
     public SelectProcessWindow()
     {
@@ -47,8 +48,7 @@ public partial class SelectProcessWindow
                 Id = process.Id,
                 Name = Path.GetFileName(process.MainModule.FileName ?? "Unidentified Process"),
                 Architecture = Utilities.GetProcessArchitecture(process),
-                Path = process.MainModule.FileName ?? string.Empty,
-                Source = process
+                Path = process.MainModule.FileName ?? string.Empty
             });
         }
     }
@@ -62,7 +62,7 @@ public partial class SelectProcessWindow
     {
         if (ProcessList.SelectedItem is not ProcessItemBinding item)
             return;
-        ProcessBox.Text = $"{Path.GetFileName(item.Source.MainModule.FileName)} ({item.Source.Id})";
+        ProcessBox.Text = $"{item.Name} ({item.Id})";
     }
 
     private void OnProcessSelected(object sender, MouseButtonEventArgs args)
@@ -75,7 +75,7 @@ public partial class SelectProcessWindow
     {
         if (ProcessList.SelectedItem is not ProcessItemBinding item)
             return;
-        SelectedProcess = item.Source;
+        SelectedProcess = new KeyValuePair<int, string>(item.Id, item.Name);
         DialogResult = true;
         Close();
     }

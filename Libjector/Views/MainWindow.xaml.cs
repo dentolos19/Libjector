@@ -16,14 +16,21 @@ namespace Libjector;
 public partial class MainWindow
 {
 
-    private Process? _targetProcess;
+    private int? _targetProcessId;
     private Injector? _injectorService;
+    private BackgroundWorker _processHandler;
 
     private MainWindowModel ViewModel => (MainWindowModel)DataContext;
 
     public MainWindow()
     {
         InitializeComponent();
+    }
+
+    private void ToggleInjectionMode(bool state)
+    {
+        InjectButton.Content = state ? "Inject" : "Eject";
+        ViewModel.IsInjectionMode = state;
     }
 
     private void OnInitialized(object sender, EventArgs args)
@@ -48,8 +55,8 @@ public partial class MainWindow
         var dialog = new SelectProcessWindow { Owner = this };
         if (dialog.ShowDialog() != true)
             return;
-        _targetProcess = dialog.SelectedProcess;
-        ProcessBox.Text = $"{Path.GetFileName(_targetProcess.MainModule.FileName)} ({_targetProcess.Id})";
+        _targetProcessId = dialog.SelectedProcess.Key;
+        ProcessBox.Text = $"{dialog.SelectedProcess.Value} ({_targetProcessId})";
     }
 
     private void OnAddDlls(object sender, RoutedEventArgs args)
@@ -97,12 +104,12 @@ public partial class MainWindow
                 MessageBox.Show("Administrative privileges is required in order to inject a library into a process!", "Libjector");
                 return;
             }
-            if (_targetProcess is null)
+            if (_targetProcessId is null)
             {
                 MessageBox.Show("Select a target process before continuing!", "Libjector");
                 return;
             }
-            if (DllList.SelectedItem is not DllItemBinding libraryItem)
+            if (DllList.SelectedItem is not DllItemBinding dllItem)
             {
                 MessageBox.Show("Select a DLL before continuing!", "Libjector");
                 return;
@@ -123,7 +130,7 @@ public partial class MainWindow
                     _ => InjectionMethod.CreateThread
                 };
                 _injectorService?.Dispose();
-                _injectorService = new Injector(_targetProcess.Id, libraryItem.Path, method, flags);
+                _injectorService = new Injector(_targetProcessId.Value, dllItem.Path, method, flags);
                 _injectorService.InjectDll();
                 if (flags.HasFlag(InjectionFlags.HideDllFromPeb))
                 {
@@ -131,8 +138,28 @@ public partial class MainWindow
                 }
                 else
                 {
-                    InjectButton.Content = "Eject";
-                    ViewModel.IsInjectionMode = false;
+                    _processHandler?.Dispose();
+                    _processHandler = new BackgroundWorker { WorkerSupportsCancellation = true };
+                    _processHandler.DoWork += delegate
+                    {
+                        try
+                        {
+                            using var process = Process.GetProcessById(_targetProcessId.Value);
+                            process.WaitForExit();
+                            Debug.WriteLine("The target process has ended.");
+                        }
+                        catch
+                        {
+                            // do nothing
+                        }
+                    };
+                    _processHandler.RunWorkerCompleted += delegate
+                    {
+                        _injectorService?.Dispose();
+                        ToggleInjectionMode(true);
+                    };
+                    _processHandler.RunWorkerAsync();
+                    ToggleInjectionMode(false);
                 }
                 MessageBox.Show("The DLL has been injected into the process!", "Libjector");
             }
@@ -145,19 +172,17 @@ public partial class MainWindow
         {
             try
             {
-                if (_injectorService is not null)
-                {
-                    _injectorService.EjectDll();
-                    _injectorService.Dispose();
-                }
-                InjectButton.Content = "Inject";
-                ViewModel.IsInjectionMode = true;
-                MessageBox.Show("The DLL has been ejected from the process!", "Libjector");
+                _injectorService?.EjectDll();
+                _injectorService?.Dispose();
             }
             catch (Exception exception)
             {
                 MessageBox.Show($"An error occurred while ejecting: {exception.Message}", "Libjector");
             }
+            _processHandler?.CancelAsync();
+            _processHandler?.Dispose();
+            ToggleInjectionMode(true);
+            MessageBox.Show("The DLL has been ejected from the process!", "Libjector");
         }
     }
 
