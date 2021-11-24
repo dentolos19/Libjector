@@ -1,15 +1,15 @@
-﻿using Libjector.Core.Bindings;
+﻿using Libjector.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Libjector.ViewModels;
 
-public class MainWindowModel : INotifyPropertyChanged
+public class MainViewModel : INotifyPropertyChanged
 {
 
     private bool _isInjectionMode = true;
-    private ObservableCollection<DllItemBinding> _dllList = new();
+    private ObservableCollection<DllItemModel> _dllList = new();
 
     public bool IsInjectionMode
     {
@@ -21,7 +21,7 @@ public class MainWindowModel : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<DllItemBinding> DllList
+    public ObservableCollection<DllItemModel> DllList
     {
         get => _dllList;
         set

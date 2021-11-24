@@ -1,6 +1,6 @@
 ﻿using Bleak;
 using Libjector.Core;
-using Libjector.Core.Bindings;
+using Libjector.Models;
 using Libjector.ViewModels;
 using Libjector.Views;
 using Microsoft.Win32;
@@ -20,7 +20,7 @@ public partial class MainWindow
     private Injector? _injectorService;
     private BackgroundWorker _processHandler;
 
-    private MainWindowModel ViewModel => (MainWindowModel)DataContext;
+    private MainViewModel ViewModel => (MainViewModel)DataContext;
 
     public MainWindow()
     {
@@ -37,7 +37,7 @@ public partial class MainWindow
     {
         foreach (var libraryPath in App.Settings.SavedDllPaths)
         {
-            ViewModel.DllList.Add(new DllItemBinding
+            ViewModel.DllList.Add(new DllItemModel
             {
                 Name = Path.GetFileName(libraryPath),
                 Architecture = Utilities.GetDllArchitecture(libraryPath),
@@ -66,7 +66,7 @@ public partial class MainWindow
             return;
         foreach (var filePath in dialog.FileNames)
         {
-            var item = new DllItemBinding
+            var item = new DllItemModel
             {
                 Name = Path.GetFileName(filePath),
                 Architecture = Utilities.GetDllArchitecture(filePath),
@@ -79,7 +79,7 @@ public partial class MainWindow
 
     private void OnRemoveDll(object sender, RoutedEventArgs args)
     {
-        if (DllList.SelectedItem is not DllItemBinding item)
+        if (DllList.SelectedItem is not DllItemModel item)
             return;
         if (MessageBox.Show("Are you sure you want to remove this library?", "Libjector", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             return;
@@ -109,7 +109,7 @@ public partial class MainWindow
                 MessageBox.Show("Select a target process before continuing!", "Libjector");
                 return;
             }
-            if (DllList.SelectedItem is not DllItemBinding dllItem)
+            if (DllList.SelectedItem is not DllItemModel dllItem)
             {
                 MessageBox.Show("Select a DLL before continuing!", "Libjector");
                 return;
@@ -179,7 +179,8 @@ public partial class MainWindow
             {
                 MessageBox.Show($"An error occurred while ejecting: {exception.Message}", "Libjector");
             }
-            _processHandler?.CancelAsync();
+            if (_processHandler?.IsBusy == true)
+                _processHandler?.CancelAsync();
             _processHandler?.Dispose();
             ToggleInjectionMode(true);
             MessageBox.Show("The DLL has been ejected from the process!", "Libjector");

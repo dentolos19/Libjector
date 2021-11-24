@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="Libjector" Width="500" SizeToContent="Height" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Initialized="OnInitialized" Closing="OnClosing">
     <Window.DataContext>
-        <vm:MainWindowModel/>
+        <vm:MainViewModel/>
     </Window.DataContext>
     <StackPanel Margin="10,5">
         <StackPanel Margin="0,5">
-            <TextBlock Text="Target Process" Margin="0,0,0,2"/>
+            <TextBlock Margin="0,0,0,2">Target Process</TextBlock>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -31,9 +31,9 @@
             <ListView x:Name="DllList" Grid.Row="0" ItemsSource="{Binding Path=DllList}" IsEnabled="{Binding Path=IsInjectionMode}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}"/>
-                        <GridViewColumn Header="Architecture" DisplayMemberBinding="{Binding Path=Architecture}"/>
-                        <GridViewColumn Header="Path" DisplayMemberBinding="{Binding Path=Path}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Name</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Architecture}">Architecture</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Path}">Path</GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

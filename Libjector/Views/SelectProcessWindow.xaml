@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Select Process" Width="300" SizeToContent="Height" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Initialized="OnInitialized">
     <Window.DataContext>
-        <vm:SelectProcessWindowModel/>
+        <vm:SelectProcessViewModel/>
     </Window.DataContext>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -21,10 +21,10 @@
         <ListView x:Name="ProcessList" Grid.Row="2" ItemsSource="{Binding Path=ProcessList}" SelectionChanged="OnProcessSelect" MouseDoubleClick="OnProcessSelected">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=Id}"/>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}"/>
-                    <GridViewColumn Header="Architecture" DisplayMemberBinding="{Binding Path=Architecture}"/>
-                    <GridViewColumn Header="Path" DisplayMemberBinding="{Binding Path=Path}"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">ID</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Name</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Architecture}">Architecture</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Path}">Path</GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

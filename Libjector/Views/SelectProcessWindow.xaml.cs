@@ -1,5 +1,6 @@
 ﻿using Libjector.Core;
-using Libjector.Core.Bindings;
+using Libjector.Models;
+using Libjector.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,14 +9,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using Libjector.ViewModels;
 
 namespace Libjector.Views;
 
 public partial class SelectProcessWindow
 {
 
-    private SelectProcessWindowModel ViewModel => (SelectProcessWindowModel)DataContext;
+    private SelectProcessViewModel ViewModel => (SelectProcessViewModel)DataContext;
 
     public KeyValuePair<int, string> SelectedProcess { get; private set; }
 
@@ -30,7 +30,7 @@ public partial class SelectProcessWindow
         var filterText = FilterBox.Text;
         if (string.IsNullOrEmpty(filterText))
             return true; // does not filter item
-        if (item is not ProcessItemBinding processItem)
+        if (item is not ProcessItemModel processItem)
             return false; // filter item
         return processItem.Id.ToString().Contains(filterText, StringComparison.OrdinalIgnoreCase)
                || processItem.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase);
@@ -43,7 +43,7 @@ public partial class SelectProcessWindow
         {
             if (process.MainWindowHandle == IntPtr.Zero)
                 continue;
-            ViewModel.ProcessList.Add(new ProcessItemBinding
+            ViewModel.ProcessList.Add(new ProcessItemModel
             {
                 Id = process.Id,
                 Name = Path.GetFileName(process.MainModule.FileName ?? "Unidentified Process"),
@@ -60,20 +60,20 @@ public partial class SelectProcessWindow
 
     private void OnProcessSelect(object sender, RoutedEventArgs args)
     {
-        if (ProcessList.SelectedItem is not ProcessItemBinding item)
+        if (ProcessList.SelectedItem is not ProcessItemModel item)
             return;
         ProcessBox.Text = $"{item.Name} ({item.Id})";
     }
 
     private void OnProcessSelected(object sender, MouseButtonEventArgs args)
     {
-        if (ProcessList.SelectedItem is ProcessItemBinding)
+        if (ProcessList.SelectedItem is ProcessItemModel)
             OnContinue(null, null);
     }
 
     private void OnContinue(object sender, RoutedEventArgs args)
     {
-        if (ProcessList.SelectedItem is not ProcessItemBinding item)
+        if (ProcessList.SelectedItem is not ProcessItemModel item)
             return;
         SelectedProcess = new KeyValuePair<int, string>(item.Id, item.Name);
         DialogResult = true;

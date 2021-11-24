@@ -1,16 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using Libjector.Models;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Libjector.Core.Bindings;
 
 namespace Libjector.ViewModels;
 
-public class SelectProcessWindowModel : INotifyPropertyChanged
+public class SelectProcessViewModel : INotifyPropertyChanged
 {
 
-    private ObservableCollection<ProcessItemBinding> _processList = new();
+    private ObservableCollection<ProcessItemModel> _processList = new();
 
-    public ObservableCollection<ProcessItemBinding> ProcessList
+    public ObservableCollection<ProcessItemModel> ProcessList
     {
         get => _processList;
         set
