@@ -18,7 +18,7 @@
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="ProcessBox" Grid.Column="0" IsReadOnly="True"/>
+                <TextBox x:Name="ProcessInput" Grid.Column="0" IsReadOnly="True"/>
                 <Button Grid.Column="2" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnSelectProcess">Select Process</Button>
             </Grid>
         </StackPanel>
@@ -58,8 +58,8 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ComboBox x:Name="MethodBox" Grid.Row="0" SelectedIndex="0" IsEnabled="{Binding Path=IsInjectionMode}">
-                <ComboBoxItem>Create Thread </ComboBoxItem>
+            <ComboBox x:Name="MethodSelection" Grid.Row="0" SelectedIndex="0" IsEnabled="{Binding Path=IsInjectionMode}">
+                <ComboBoxItem>Create Thread</ComboBoxItem>
                 <ComboBoxItem>Hijack Thread</ComboBoxItem>
                 <ComboBoxItem>Manual Map</ComboBoxItem>
             </ComboBox>

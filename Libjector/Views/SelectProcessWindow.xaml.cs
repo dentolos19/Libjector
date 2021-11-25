@@ -27,7 +27,7 @@ public partial class SelectProcessWindow
 
     private bool FilterProcesses(object item)
     {
-        var filterText = FilterBox.Text;
+        var filterText = FilterInput.Text;
         if (string.IsNullOrEmpty(filterText))
             return true; // does not filter item
         if (item is not ProcessItemModel processItem)
@@ -62,7 +62,7 @@ public partial class SelectProcessWindow
     {
         if (ProcessList.SelectedItem is not ProcessItemModel item)
             return;
-        ProcessBox.Text = $"{item.Name} ({item.Id})";
+        ProcessInput.Text = $"{item.Name} ({item.Id})";
     }
 
     private void OnProcessSelected(object sender, MouseButtonEventArgs args)

@@ -37,6 +37,8 @@ public partial class MainWindow
     {
         foreach (var libraryPath in App.Settings.SavedDllPaths)
         {
+            if (!File.Exists(libraryPath))
+                continue;
             ViewModel.DllList.Add(new DllItemModel
             {
                 Name = Path.GetFileName(libraryPath),
@@ -44,7 +46,7 @@ public partial class MainWindow
                 Path = libraryPath
             });
         }
-        MethodBox.SelectedIndex = App.Settings.SavedMethodIndex;
+        MethodSelection.SelectedIndex = App.Settings.SavedMethodIndex;
         HideDllOption.IsChecked = App.Settings.SavedHideDllFlagChecked;
         RandomizeHeaderOption.IsChecked = App.Settings.SavedRandomizeHeaderFlagChecked;
         RandomizeNameOption.IsChecked = App.Settings.SavedRandomizeNameFlagChecked;
@@ -56,7 +58,7 @@ public partial class MainWindow
         if (dialog.ShowDialog() != true)
             return;
         _targetProcessId = dialog.SelectedProcess.Key;
-        ProcessBox.Text = $"{dialog.SelectedProcess.Value} ({_targetProcessId})";
+        ProcessInput.Text = $"{dialog.SelectedProcess.Value} ({_targetProcessId})";
     }
 
     private void OnAddDlls(object sender, RoutedEventArgs args)
@@ -123,7 +125,7 @@ public partial class MainWindow
                     flags |= InjectionFlags.RandomiseDllHeaders;
                 if (RandomizeNameOption.IsChecked == true)
                     flags |= InjectionFlags.RandomiseDllName;
-                var method = MethodBox.SelectedIndex switch
+                var method = MethodSelection.SelectedIndex switch
                 {
                     1 => InjectionMethod.HijackThread,
                     2 => InjectionMethod.ManualMap,
@@ -190,7 +192,7 @@ public partial class MainWindow
     private void OnClosing(object sender, CancelEventArgs args)
     {
         App.Settings.SavedDllPaths = ViewModel.DllList.Select(libraryItem => libraryItem.Path).ToArray();
-        App.Settings.SavedMethodIndex = MethodBox.SelectedIndex;
+        App.Settings.SavedMethodIndex = MethodSelection.SelectedIndex;
         App.Settings.SavedHideDllFlagChecked = HideDllOption.IsChecked == true;
         App.Settings.SavedRandomizeHeaderFlagChecked = RandomizeHeaderOption.IsChecked == true;
         App.Settings.SavedRandomizeNameFlagChecked = RandomizeNameOption.IsChecked == true;

@@ -17,7 +17,7 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="FilterBox" Grid.Row="0" TextChanged="OnProcessFilter"/>
+        <TextBox x:Name="FilterInput" Grid.Row="0" TextChanged="OnProcessFilter"/>
         <ListView x:Name="ProcessList" Grid.Row="2" ItemsSource="{Binding Path=ProcessList}" SelectionChanged="OnProcessSelect" MouseDoubleClick="OnProcessSelected">
             <ListView.View>
                 <GridView>
@@ -34,7 +34,7 @@
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="ProcessBox" Grid.Column="0" IsReadOnly="True"/>
+            <TextBox x:Name="ProcessInput" Grid.Column="0" IsReadOnly="True"/>
             <Button Grid.Column="2" Click="OnContinue">Continue</Button>
         </Grid>
     </Grid>
