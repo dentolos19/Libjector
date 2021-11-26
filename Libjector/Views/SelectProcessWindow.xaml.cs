@@ -32,8 +32,8 @@ public partial class SelectProcessWindow
             return true; // does not filter item
         if (item is not ProcessItemModel processItem)
             return false; // filter item
-        return processItem.Id.ToString().Contains(filterText, StringComparison.OrdinalIgnoreCase)
-               || processItem.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase);
+        return processItem.Id.ToString().Contains(filterText, StringComparison.OrdinalIgnoreCase) // checks process id
+               || processItem.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase); // checks process name
     }
 
     private void OnInitialized(object sender, EventArgs args)
@@ -43,13 +43,7 @@ public partial class SelectProcessWindow
         {
             if (process.MainWindowHandle == IntPtr.Zero)
                 continue;
-            ViewModel.ProcessList.Add(new ProcessItemModel
-            {
-                Id = process.Id,
-                Name = Path.GetFileName(process.MainModule.FileName ?? "Unidentified Process"),
-                Architecture = Utilities.GetProcessArchitecture(process),
-                Path = process.MainModule.FileName ?? string.Empty
-            });
+            ViewModel.ProcessList.Add(new ProcessItemModel(process.Id, Path.GetFileName(process.MainModule?.FileName ?? "Unidentified Process"), Utilities.GetProcessArchitecture(process), process.MainModule?.FileName ?? string.Empty));
         }
     }
 

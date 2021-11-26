@@ -8,7 +8,7 @@ public class BaseViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public void UpdateProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
+    protected void UpdateProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
     {
         if (Equals(storage, value))
             return;

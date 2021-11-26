@@ -28,7 +28,7 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="DllList" Grid.Row="0" ItemsSource="{Binding Path=DllList}" IsEnabled="{Binding Path=IsInjectionMode}">
+            <ListView x:Name="DllList" Grid.Row="0" IsEnabled="{Binding Path=IsInjectionMode}" ItemsSource="{Binding Path=DllList}" AllowDrop="True" Drop="OnFileDrop" MouseDoubleClick="OnOpenDll">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Name</GridViewColumn>
@@ -58,7 +58,7 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ComboBox x:Name="MethodSelection" Grid.Row="0" SelectedIndex="0" IsEnabled="{Binding Path=IsInjectionMode}">
+            <ComboBox x:Name="MethodSelection" Grid.Row="0" IsEnabled="{Binding Path=IsInjectionMode}" SelectedIndex="0">
                 <ComboBoxItem>Create Thread</ComboBoxItem>
                 <ComboBoxItem>Hijack Thread</ComboBoxItem>
                 <ComboBoxItem>Manual Map</ComboBoxItem>

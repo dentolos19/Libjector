@@ -46,4 +46,9 @@ public static class Utilities
         return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
     }
 
+    public static void ShowFileInExplorer(string filePath)
+    {
+        Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+    }
+
 }
