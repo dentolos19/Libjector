@@ -9,8 +9,8 @@
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
-    <StackPanel Margin="10,5">
-        <StackPanel Margin="0,5">
+    <StackPanel Margin="10,7.5">
+        <StackPanel Margin="0,2.5">
             <TextBlock Margin="0,0,0,2">Target Process</TextBlock>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -22,7 +22,7 @@
                 <Button Grid.Column="2" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnSelectProcess">Select Process</Button>
             </Grid>
         </StackPanel>
-        <Grid Margin="0,5">
+        <Grid Margin="0,2.5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" MinHeight="200"/>
                 <RowDefinition Height="5"/>
@@ -50,7 +50,7 @@
                 <Button Grid.Column="4" IsEnabled="{Binding Path=IsInjectionMode}" Click="OnRemoveAllDlls">Remove All DLLs</Button>
             </Grid>
         </Grid>
-        <Grid Margin="0,5">
+        <Grid Margin="0,2.5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
@@ -70,7 +70,7 @@
                     </Style>
                 </StackPanel.Resources>
                 <CheckBox x:Name="HideDllOption" IsEnabled="{Binding Path=IsInjectionMode}">Hide DLL From Process Environment Block (No Ejection Support)</CheckBox>
-                <CheckBox x:Name="RandomizeHeaderOption" IsEnabled="{Binding Path=IsInjectionMode}">Randomize DLL Header</CheckBox>
+                <CheckBox x:Name="RandomizeHeadersOption" IsEnabled="{Binding Path=IsInjectionMode}">Randomize DLL Headers</CheckBox>
                 <CheckBox x:Name="RandomizeNameOption" IsEnabled="{Binding Path=IsInjectionMode}">Randomize DLL Name</CheckBox>
             </StackPanel>
             <Button x:Name="InjectButton" Grid.Row="4" Click="OnInject">Inject</Button>

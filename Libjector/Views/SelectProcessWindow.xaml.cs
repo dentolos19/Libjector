@@ -29,9 +29,9 @@ public partial class SelectProcessWindow
     {
         var filterText = FilterInput.Text;
         if (string.IsNullOrEmpty(filterText))
-            return true; // does not filter item
+            return true; // does not filter item (keeps it)
         if (item is not ProcessItemModel processItem)
-            return false; // filter item
+            return false; // filter item (hides it)
         return processItem.Id.ToString().Contains(filterText, StringComparison.OrdinalIgnoreCase) // checks process id
                || processItem.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase); // checks process name
     }
@@ -42,7 +42,7 @@ public partial class SelectProcessWindow
         foreach (var process in processes)
         {
             if (process.MainWindowHandle == IntPtr.Zero)
-                continue;
+                continue; // continues the loop; if the process doesn't have a window or it is a background process
             ViewModel.ProcessList.Add(new ProcessItemModel(process.Id, Path.GetFileName(process.MainModule?.FileName ?? "Unidentified Process"), Utilities.GetProcessArchitecture(process), process.MainModule?.FileName ?? string.Empty));
         }
     }

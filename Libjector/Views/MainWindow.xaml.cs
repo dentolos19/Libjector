@@ -19,7 +19,7 @@ public partial class MainWindow
 
     private int? _targetProcessId;
     private Injector? _injectorService;
-    private BackgroundWorker _processHandler;
+    private BackgroundWorker? _processHandler;
 
     private MainViewModel ViewModel => (MainViewModel)DataContext;
 
@@ -44,7 +44,7 @@ public partial class MainWindow
         }
         MethodSelection.SelectedIndex = App.Settings.SavedMethodIndex;
         HideDllOption.IsChecked = App.Settings.SavedHideDllFlagChecked;
-        RandomizeHeaderOption.IsChecked = App.Settings.SavedRandomizeHeaderFlagChecked;
+        RandomizeHeadersOption.IsChecked = App.Settings.SavedRandomizeHeaderFlagChecked;
         RandomizeNameOption.IsChecked = App.Settings.SavedRandomizeNameFlagChecked;
     }
 
@@ -114,17 +114,17 @@ public partial class MainWindow
     {
         if (ViewModel.IsInjectionMode)
         {
-            if (!Utilities.IsRunningAsAdministrator())
+            if (!Utilities.IsRunningAsAdministrator()) // checks whether the app is running as administrator
             {
                 MessageBox.Show("Administrative privileges is required in order to inject a DLL into a process!", "Libjector");
                 return;
             }
-            if (_targetProcessId is null)
+            if (_targetProcessId is null) // checks whether the target process is selected yet
             {
                 MessageBox.Show("Select a target process before continuing!", "Libjector");
                 return;
             }
-            if (DllList.SelectedItem is not DllItemModel dllItem)
+            if (DllList.SelectedItem is not DllItemModel dllItem) // checks whether the dll is selected yet
             {
                 MessageBox.Show("Select a DLL before continuing!", "Libjector");
                 return;
@@ -132,11 +132,11 @@ public partial class MainWindow
             try
             {
                 var injectionFlags = InjectionFlags.None;
-                if (HideDllOption.IsChecked == true)
+                if (HideDllOption.IsChecked == true) // adds hide from peb flag
                     injectionFlags |= InjectionFlags.HideDllFromPeb;
-                if (RandomizeHeaderOption.IsChecked == true)
+                if (RandomizeHeadersOption.IsChecked == true) // adds randomize headers flag
                     injectionFlags |= InjectionFlags.RandomiseDllHeaders;
-                if (RandomizeNameOption.IsChecked == true)
+                if (RandomizeNameOption.IsChecked == true) // adds randomize name flag
                     injectionFlags |= InjectionFlags.RandomiseDllName;
                 var injectionMethod = MethodSelection.SelectedIndex switch
                 {
@@ -144,24 +144,23 @@ public partial class MainWindow
                     2 => InjectionMethod.ManualMap,
                     _ => InjectionMethod.CreateThread
                 };
-                _injectorService?.Dispose();
+                _injectorService?.Dispose(); // disposes any existing injector service
                 _injectorService = new Injector(_targetProcessId.Value, dllItem.Path, injectionMethod, injectionFlags);
-                _injectorService.InjectDll();
+                _injectorService.InjectDll(); // injects dll into the target process
                 if (injectionFlags.HasFlag(InjectionFlags.HideDllFromPeb))
                 {
-                    _injectorService.Dispose();
+                    _injectorService.Dispose(); // disposes the injector service; if the specific flag is used
                 }
                 else
                 {
-                    _processHandler?.Dispose();
+                    _processHandler?.Dispose(); // disposes any existing process handler
                     _processHandler = new BackgroundWorker { WorkerSupportsCancellation = true };
                     _processHandler.DoWork += delegate
                     {
                         try
                         {
                             using var process = Process.GetProcessById(_targetProcessId.Value);
-                            process.WaitForExit();
-                            Debug.WriteLine("The target process has ended.");
+                            process.WaitForExit(); // waits for the target process to exit
                         }
                         catch
                         {
@@ -170,17 +169,17 @@ public partial class MainWindow
                     };
                     _processHandler.RunWorkerCompleted += delegate
                     {
-                        _injectorService?.Dispose();
+                        _injectorService?.Dispose(); // disposes the injector service; as the target process has been closed
                         ToggleInjectionMode(true);
                     };
-                    _processHandler.RunWorkerAsync();
+                    _processHandler.RunWorkerAsync(); // runs until the dll is ejected or the target process is closed
                     ToggleInjectionMode(false);
                 }
                 MessageBox.Show("The DLL has been injected into the process!", "Libjector");
             }
             catch (Exception exception)
             {
-                MessageBox.Show($"An error occurred while injecting: {exception.Message}", "Libjector");
+                MessageBox.Show("An error occurred while injecting! " + exception.Message, "Libjector");
             }
         }
         else
@@ -192,10 +191,10 @@ public partial class MainWindow
             }
             catch (Exception exception)
             {
-                MessageBox.Show($"An error occurred while ejecting: {exception.Message}", "Libjector");
+                MessageBox.Show("An error occurred while ejecting! " + exception.Message, "Libjector");
             }
             if (_processHandler?.IsBusy == true)
-                _processHandler?.CancelAsync();
+                _processHandler?.CancelAsync(); // cancels the process handler; as the dll has been ejected
             _processHandler?.Dispose();
             ToggleInjectionMode(true);
             MessageBox.Show("The DLL has been ejected from the process!", "Libjector");
@@ -207,7 +206,7 @@ public partial class MainWindow
         App.Settings.SavedDllPaths = ViewModel.DllList.Select(libraryItem => libraryItem.Path).ToArray();
         App.Settings.SavedMethodIndex = MethodSelection.SelectedIndex;
         App.Settings.SavedHideDllFlagChecked = HideDllOption.IsChecked == true;
-        App.Settings.SavedRandomizeHeaderFlagChecked = RandomizeHeaderOption.IsChecked == true;
+        App.Settings.SavedRandomizeHeaderFlagChecked = RandomizeHeadersOption.IsChecked == true;
         App.Settings.SavedRandomizeNameFlagChecked = RandomizeNameOption.IsChecked == true;
         App.Settings.Save();
     }
