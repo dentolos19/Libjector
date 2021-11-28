@@ -37,11 +37,8 @@ public partial class MainWindow
     private void OnInitialized(object sender, EventArgs args)
     {
         foreach (var libraryPath in App.Settings.SavedDllPaths)
-        {
-            if (!File.Exists(libraryPath))
-                continue;
-            ViewModel.DllList.Add(new DllItemModel(Path.GetFileName(libraryPath), Utilities.GetDllArchitecture(libraryPath), libraryPath));
-        }
+            if (File.Exists(libraryPath))
+                ViewModel.DllList.Add(new DllItemModel(Path.GetFileName(libraryPath), Utilities.GetDllArchitecture(libraryPath), libraryPath));
         MethodSelection.SelectedIndex = App.Settings.SavedMethodIndex;
         HideDllOption.IsChecked = App.Settings.SavedHideDllFlagChecked;
         RandomizeHeadersOption.IsChecked = App.Settings.SavedRandomizeHeaderFlagChecked;
@@ -89,25 +86,22 @@ public partial class MainWindow
     {
         if (DllList.SelectedItem is not DllItemModel item)
             return;
-        if (MessageBox.Show("Are you sure you want to remove this library?", "Libjector", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-            return;
-        ViewModel.DllList.Remove(item);
+        if (MessageBox.Show("Are you sure you want to remove this library?", "Libjector", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            ViewModel.DllList.Remove(item);
     }
 
     private void OnRemoveAllDlls(object sender, RoutedEventArgs args)
     {
         if (!(DllList.Items.Count > 0))
             return;
-        if (MessageBox.Show("Are you sure you want to remove all libraries?", "Libjector", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-            return;
-        ViewModel.DllList.Clear();
+        if (MessageBox.Show("Are you sure you want to remove all libraries?", "Libjector", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            ViewModel.DllList.Clear();
     }
 
     private void OnOpenDll(object sender, MouseButtonEventArgs args)
     {
-        if (DllList.SelectedItem is not DllItemModel item)
-            return;
-        Utilities.ShowFileInExplorer(item.Path);
+        if (DllList.SelectedItem is DllItemModel item)
+            Utilities.ShowFileInExplorer(item.Path);
     }
 
     private void OnInject(object sender, RoutedEventArgs args)

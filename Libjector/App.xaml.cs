@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using Libjector.Core;
+using System.Windows;
 using System.Windows.Threading;
-using Libjector.Core;
 
 namespace Libjector;
 

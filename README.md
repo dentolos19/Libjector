@@ -14,7 +14,7 @@ This injector is powered by [Bleak](https://github.com/Akaion/Bleak) which is by
   * [X] Create Thread: Creates a new thread in the process and uses it to load a DLL
   * [X] Hijack Thread: Hijacks an existing thread in the process and forces it to load a DLL
   * [X] Manual Map: Manually emulates part of the Windows loader to map the DLL into the process
-* [X] Supports useful injection flags (for preventing detection by parent process)
+* [X] Supports useful injection flags (for preventing detection by the target process)
   * [X] Hide DLL from [Process Environment Block](https://wikipedia.org/wiki/Process_Environment_Block)
   * [X] Randomize DLL headers
   * [X] Randomize DLL name
