@@ -15,4 +15,9 @@ public partial class App
         args.Handled = true;
     }
 
+    private void OnExit(object sender, ExitEventArgs args)
+    {
+        Settings.Save();
+    }
+
 }

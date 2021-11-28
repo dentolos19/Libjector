@@ -7,7 +7,7 @@ namespace Libjector.Core;
 public class Settings
 {
 
-    private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libjector.settings.json");
+    private static readonly string SettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libjector.settings.json");
 
     public string[] SavedDllPaths { get; set; } = Array.Empty<string>();
     public int SavedMethodIndex { get; set; }
@@ -17,14 +17,14 @@ public class Settings
 
     public void Save()
     {
-        File.WriteAllText(FilePath, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+        File.WriteAllText(SettingsPath, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
     }
 
     public static Settings Load()
     {
-        return !File.Exists(FilePath)
+        return !File.Exists(SettingsPath)
             ? new Settings()
-            : JsonSerializer.Deserialize<Settings>(File.ReadAllText(FilePath));
+            : JsonSerializer.Deserialize<Settings>(File.ReadAllText(SettingsPath));
     }
 
 }

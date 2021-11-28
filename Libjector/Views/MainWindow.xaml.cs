@@ -208,7 +208,6 @@ public partial class MainWindow
         App.Settings.SavedHideDllFlagChecked = HideDllOption.IsChecked == true;
         App.Settings.SavedRandomizeHeaderFlagChecked = RandomizeHeadersOption.IsChecked == true;
         App.Settings.SavedRandomizeNameFlagChecked = RandomizeNameOption.IsChecked == true;
-        App.Settings.Save();
     }
 
 }

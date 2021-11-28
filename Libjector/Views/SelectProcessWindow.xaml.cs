@@ -22,18 +22,18 @@ public partial class SelectProcessWindow
     public SelectProcessWindow()
     {
         InitializeComponent();
-        ((CollectionView)CollectionViewSource.GetDefaultView(ProcessList.ItemsSource)).Filter = FilterProcesses;
+        ((CollectionView)CollectionViewSource.GetDefaultView(ProcessList.ItemsSource)).Filter = FilterProcess;
     }
 
-    private bool FilterProcesses(object item)
+    private bool FilterProcess(object item)
     {
-        var filterText = FilterInput.Text;
-        if (string.IsNullOrEmpty(filterText))
+        var filter = FilterInput.Text;
+        if (string.IsNullOrEmpty(filter))
             return true; // does not filter item (keeps it)
         if (item is not ProcessItemModel processItem)
             return false; // filter item (hides it)
-        return processItem.Id.ToString().Contains(filterText, StringComparison.OrdinalIgnoreCase) // checks process id
-               || processItem.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase); // checks process name
+        return processItem.Id.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase) || // checks process id
+               processItem.Name.Contains(filter, StringComparison.OrdinalIgnoreCase); // checks process name
     }
 
     private void OnInitialized(object sender, EventArgs args)
@@ -54,9 +54,8 @@ public partial class SelectProcessWindow
 
     private void OnProcessSelect(object sender, RoutedEventArgs args)
     {
-        if (ProcessList.SelectedItem is not ProcessItemModel item)
-            return;
-        ProcessInput.Text = $"{item.Name} ({item.Id})";
+        if (ProcessList.SelectedItem is ProcessItemModel item)
+            ProcessInput.Text = $"{item.Name} ({item.Id})";
     }
 
     private void OnProcessSelected(object sender, MouseButtonEventArgs args)
