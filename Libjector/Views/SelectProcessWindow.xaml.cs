@@ -1,23 +1,23 @@
-﻿using Libjector.Core;
-using Libjector.Models;
-using Libjector.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Libjector.Core;
+using Libjector.Models;
 
 namespace Libjector.Views;
 
 public partial class SelectProcessWindow
 {
 
-    private SelectProcessViewModel ViewModel => (SelectProcessViewModel)DataContext;
+    public ObservableCollection<ProcessItemModel> Items { get; } = new();
 
-    public KeyValuePair<int, string> SelectedProcess { get; private set; }
+    public KeyValuePair<int, string> Result { get; private set; }
 
     public SelectProcessWindow()
     {
@@ -33,7 +33,7 @@ public partial class SelectProcessWindow
         if (item is not ProcessItemModel processItem)
             return false; // filter item (hides it)
         return processItem.Id.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase) // checks process id
-               || processItem.Name.Contains(filter, StringComparison.OrdinalIgnoreCase); // checks process name
+            || processItem.Name.Contains(filter, StringComparison.OrdinalIgnoreCase); // checks process name
     }
 
     private void OnInitialized(object sender, EventArgs args)
@@ -43,7 +43,7 @@ public partial class SelectProcessWindow
         {
             if (process.MainWindowHandle == IntPtr.Zero)
                 continue; // continues the loop; if the process doesn't have a window or it is a background process
-            ViewModel.ProcessList.Add(new ProcessItemModel(process.Id, Path.GetFileName(process.MainModule?.FileName ?? "Unidentified Process"), Utilities.GetProcessArchitecture(process), process.MainModule?.FileName ?? string.Empty));
+            Items.Add(new ProcessItemModel(process.Id, Path.GetFileName(process.MainModule?.FileName ?? "Unidentified Process"), Utilities.GetProcessArchitecture(process), process.MainModule?.FileName ?? string.Empty));
         }
     }
 
@@ -68,7 +68,7 @@ public partial class SelectProcessWindow
     {
         if (ProcessList.SelectedItem is not ProcessItemModel item)
             return;
-        SelectedProcess = new KeyValuePair<int, string>(item.Id, item.Name);
+        Result = new KeyValuePair<int, string>(item.Id, item.Name);
         DialogResult = true;
         Close();
     }

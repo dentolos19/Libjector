@@ -1,3 +1,5 @@
-﻿namespace Libjector.Models;
+﻿using System.Runtime.InteropServices;
 
-public record DllItemModel(string Name, string Architecture, string Path);
+namespace Libjector.Models;
+
+public record DllItemModel(string Name, Architecture? Architecture, string Path);

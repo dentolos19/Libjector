@@ -1,16 +1,15 @@
-﻿using Bleak;
-using Libjector.Core;
-using Libjector.Models;
-using Libjector.ViewModels;
-using Libjector.Views;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Bleak;
+using Libjector.Core;
+using Libjector.Models;
+using Libjector.Views;
+using Microsoft.Win32;
 
 namespace Libjector;
 
@@ -50,8 +49,8 @@ public partial class MainWindow
         var dialog = new SelectProcessWindow { Owner = this };
         if (dialog.ShowDialog() != true)
             return;
-        _targetProcessId = dialog.SelectedProcess.Key;
-        ProcessInput.Text = $"{dialog.SelectedProcess.Value} ({_targetProcessId})";
+        _targetProcessId = dialog.Result.Key;
+        ProcessInput.Text = $"{dialog.Result.Value} ({_targetProcessId})";
     }
 
     private void OnFileDrop(object sender, DragEventArgs args)

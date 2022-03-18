@@ -11,18 +11,18 @@ public static class Utilities
 
     [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool IsWow64Process([In] IntPtr processHandle, [Out, MarshalAs(UnmanagedType.Bool)] out bool wow64Process);
+    private static extern bool IsWow64Process([In] IntPtr processHandle, [Out] [MarshalAs(UnmanagedType.Bool)] out bool wow64Process);
 
-    public static string GetProcessArchitecture(Process process)
+    public static Architecture? GetProcessArchitecture(Process process)
     {
         if (!Environment.Is64BitOperatingSystem)
-            return "32-bit";
+            return Architecture.X86;
         if (!IsWow64Process(process.Handle, out var result))
-            return "Unknown Architecture";
-        return result ? "32-bit" : "64-bit";
+            return null;
+        return result ? Architecture.X86 : Architecture.X64;
     }
 
-    public static string GetDllArchitecture(string libraryPath)
+    public static Architecture? GetDllArchitecture(string libraryPath)
     {
         using var stream = new FileStream(libraryPath, FileMode.Open, FileAccess.Read);
         using var reader = new BinaryReader(stream);
@@ -31,13 +31,13 @@ public static class Utilities
         stream.Seek(offset, SeekOrigin.Begin);
         var head = reader.ReadUInt32();
         if (head != 0x00004550)
-            return "Unknown Architecture";
+            return null;
         return (ushort)reader.ReadInt16() switch
         {
-            0x8664 => "64-bit",
-            0x200 => "64-bit",
-            0x14c => "32-bit",
-            _ => "Unknown Architecture"
+            0x8664 => Architecture.X64,
+            0x200 => Architecture.X64,
+            0x14c => Architecture.X86,
+            _ => null
         };
     }
 
