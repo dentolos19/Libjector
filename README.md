@@ -1,8 +1,5 @@
 # <img src="./.github/icon.png" width="32"/> Libjector
 
-[![](https://img.shields.io/badge/Powered%20By-.NET-blue?logo=microsoft&style=flat-square)](https://dotnet.microsoft.com)
-[![](https://img.shields.io/badge/Made%20With-Visual%20Studio-blue?logo=visual-studio&style=flat-square)](https://visualstudio.microsoft.com)
-
 A simple and easy-to-use DLL injector!
 
 This injector is powered by [Bleak](https://github.com/Akaion/Bleak) which is by now deprecated and is no longer being maintained by the [original owner](https://github.com/Akaion), even so, it still works properly as intended. However, not all solutions come without [caveats](https://github.com/Akaion/Bleak#caveats).
