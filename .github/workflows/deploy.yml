@@ -1,0 +1,41 @@
+name: Deploy Live (Pre-)Release
+on:
+  push:
+    paths:
+      - Libjector/**
+  workflow_dispatch:
+env:
+  release-tag: Commitly
+jobs:
+  deploy:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Publish Project
+        run: dotnet publish --configuration Release --output build/
+      - name: Create Package
+        uses: vimtor/action-zip@v1
+        with:
+          files: build/
+          dest: ${{ github.event.repository.name }}.zip
+      - name: Delete Existing Tag
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.release-tag }}
+          delete_release: true
+      - name: Deploy Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{ github.event.repository.name }}.zip
+          prerelease: true
+          tag: ${{ env.release-tag }}
+          commit: main
