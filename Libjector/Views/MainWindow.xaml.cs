@@ -10,6 +10,9 @@ using Libjector.Core;
 using Libjector.Models;
 using Libjector.Views;
 using Microsoft.Win32;
+using MessageBox = AdonisUI.Controls.MessageBox;
+using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
+using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
 namespace Libjector;
 

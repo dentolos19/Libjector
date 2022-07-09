@@ -1,11 +1,11 @@
-name: Deploy Live Release
+name: Commitly Deployment Workflow
 on:
   push:
     paths:
       - Libjector/**
   workflow_dispatch:
 env:
-  release-tag: Commitly
+  RELEASE_TAG: Commitly
 jobs:
   deploy:
     runs-on: windows-latest
@@ -30,12 +30,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.release-tag }}
+          tag_name: ${{ env.RELEASE_TAG }}
           delete_release: true
       - name: Deploy Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: ${{ github.event.repository.name }}.zip
           prerelease: true
-          tag: ${{ env.release-tag }}
+          tag: ${{ env.RELEASE_TAG }}
           commit: main
