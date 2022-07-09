@@ -1,18 +1,15 @@
 ﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Libjector.Models;
 
-public class MainViewModel : BaseViewModel
+public partial class MainViewModel : ObservableObject
 {
 
-    private bool _isInjectionMode = true;
-
-    public ObservableCollection<DllItemModel> DllList { get; } = new();
-
-    public bool IsInjectionMode
-    {
-        get => _isInjectionMode;
-        set => UpdateProperty(ref _isInjectionMode, value);
-    }
+    [ObservableProperty] private bool _injectionMode = true;
+    [ObservableProperty] private bool _hideDllFlag;
+    [ObservableProperty] private bool _randomizeHeadersFlag;
+    [ObservableProperty] private bool _randomizeNameFlag;
+    [ObservableProperty] private ObservableCollection<DllItemModel> _dllList = new();
 
 }

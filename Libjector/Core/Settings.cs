@@ -9,11 +9,11 @@ public class Settings
 
     private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libjector.settings.json");
 
-    public string[] SavedDllPaths { get; set; } = Array.Empty<string>();
-    public int SavedMethodIndex { get; set; }
-    public bool SavedHideDllFlagChecked { get; set; }
-    public bool SavedRandomizeHeaderFlagChecked { get; set; }
-    public bool SavedRandomizeNameFlagChecked { get; set; } = true;
+    public string[] DllPaths { get; set; } = Array.Empty<string>();
+    public int MethodIndex { get; set; }
+    public bool IsHideDllFlagChecked { get; set; }
+    public bool IsRandomizeHeadersFlagChecked { get; set; }
+    public bool IsRandomizeNameFlagChecked { get; set; } = true;
 
     public void Save()
     {

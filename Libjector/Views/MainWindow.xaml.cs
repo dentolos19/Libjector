@@ -20,7 +20,7 @@ public partial class MainWindow
     private Injector? _injectorService;
     private BackgroundWorker? _processHandler;
 
-    private MainViewModel ViewModel => (MainViewModel)DataContext;
+    private MainViewModel Context => (MainViewModel)DataContext;
 
     public MainWindow()
     {
@@ -30,18 +30,18 @@ public partial class MainWindow
     private void ToggleInjectionMode(bool state)
     {
         InjectButton.Content = state ? "Inject" : "Eject";
-        ViewModel.IsInjectionMode = state;
+        Context.InjectionMode = state;
     }
 
     private void OnInitialized(object sender, EventArgs args)
     {
-        foreach (var libraryPath in App.Settings.SavedDllPaths)
+        foreach (var libraryPath in App.Settings.DllPaths)
             if (File.Exists(libraryPath))
-                ViewModel.DllList.Add(new DllItemModel(Path.GetFileName(libraryPath), Utilities.GetDllArchitecture(libraryPath), libraryPath));
-        MethodSelection.SelectedIndex = App.Settings.SavedMethodIndex;
-        HideDllOption.IsChecked = App.Settings.SavedHideDllFlagChecked;
-        RandomizeHeadersOption.IsChecked = App.Settings.SavedRandomizeHeaderFlagChecked;
-        RandomizeNameOption.IsChecked = App.Settings.SavedRandomizeNameFlagChecked;
+                Context.DllList.Add(new DllItemModel(Path.GetFileName(libraryPath), Utilities.GetDllArchitecture(libraryPath), libraryPath));
+        MethodSelection.SelectedIndex = App.Settings.MethodIndex;
+        Context.HideDllFlag = App.Settings.IsHideDllFlagChecked;
+        Context.RandomizeHeadersFlag = App.Settings.IsRandomizeHeadersFlagChecked;
+        Context.RandomizeNameFlag = App.Settings.IsRandomizeNameFlagChecked;
     }
 
     private void OnSelectProcess(object sender, RoutedEventArgs args)
@@ -63,8 +63,8 @@ public partial class MainWindow
             if (!Path.GetExtension(filePath).Equals(".dll", StringComparison.OrdinalIgnoreCase))
                 continue;
             var item = new DllItemModel(Path.GetFileName(filePath), Utilities.GetDllArchitecture(filePath), filePath);
-            if (!ViewModel.DllList.Contains(item))
-                ViewModel.DllList.Add(item);
+            if (!Context.DllList.Contains(item))
+                Context.DllList.Add(item);
         }
     }
 
@@ -76,8 +76,8 @@ public partial class MainWindow
         foreach (var dllPath in dialog.FileNames)
         {
             var item = new DllItemModel(Path.GetFileName(dllPath), Utilities.GetDllArchitecture(dllPath), dllPath);
-            if (!ViewModel.DllList.Contains(item))
-                ViewModel.DllList.Add(item);
+            if (!Context.DllList.Contains(item))
+                Context.DllList.Add(item);
         }
     }
 
@@ -86,7 +86,7 @@ public partial class MainWindow
         if (DllList.SelectedItem is not DllItemModel item)
             return;
         if (MessageBox.Show("Are you sure you want to remove this library?", "Libjector", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            ViewModel.DllList.Remove(item);
+            Context.DllList.Remove(item);
     }
 
     private void OnRemoveAllDlls(object sender, RoutedEventArgs args)
@@ -94,7 +94,7 @@ public partial class MainWindow
         if (!(DllList.Items.Count > 0))
             return;
         if (MessageBox.Show("Are you sure you want to remove all libraries?", "Libjector", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            ViewModel.DllList.Clear();
+            Context.DllList.Clear();
     }
 
     private void OnOpenDll(object sender, MouseButtonEventArgs args)
@@ -105,7 +105,7 @@ public partial class MainWindow
 
     private void OnInject(object sender, RoutedEventArgs args)
     {
-        if (ViewModel.IsInjectionMode)
+        if (Context.InjectionMode)
         {
             if (!Utilities.IsRunningAsAdministrator()) // checks whether the app is running as administrator
             {
@@ -125,11 +125,11 @@ public partial class MainWindow
             try
             {
                 var injectionFlags = InjectionFlags.None;
-                if (HideDllOption.IsChecked == true) // adds hide from peb flag
+                if (Context.HideDllFlag) // adds hide from peb flag
                     injectionFlags |= InjectionFlags.HideDllFromPeb;
-                if (RandomizeHeadersOption.IsChecked == true) // adds randomize headers flag
+                if (Context.RandomizeHeadersFlag) // adds randomize headers flag
                     injectionFlags |= InjectionFlags.RandomiseDllHeaders;
-                if (RandomizeNameOption.IsChecked == true) // adds randomize name flag
+                if (Context.RandomizeNameFlag) // adds randomize name flag
                     injectionFlags |= InjectionFlags.RandomiseDllName;
                 var injectionMethod = MethodSelection.SelectedIndex switch
                 {
@@ -196,11 +196,11 @@ public partial class MainWindow
 
     private void OnClosing(object sender, CancelEventArgs args)
     {
-        App.Settings.SavedDllPaths = ViewModel.DllList.Select(libraryItem => libraryItem.Path).ToArray();
-        App.Settings.SavedMethodIndex = MethodSelection.SelectedIndex;
-        App.Settings.SavedHideDllFlagChecked = HideDllOption.IsChecked == true;
-        App.Settings.SavedRandomizeHeaderFlagChecked = RandomizeHeadersOption.IsChecked == true;
-        App.Settings.SavedRandomizeNameFlagChecked = RandomizeNameOption.IsChecked == true;
+        App.Settings.DllPaths = Context.DllList.Select(libraryItem => libraryItem.Path).ToArray();
+        App.Settings.MethodIndex = MethodSelection.SelectedIndex;
+        App.Settings.IsHideDllFlagChecked = Context.HideDllFlag;
+        App.Settings.IsRandomizeHeadersFlagChecked = Context.RandomizeHeadersFlag;
+        App.Settings.IsRandomizeNameFlagChecked = Context.RandomizeNameFlag;
     }
 
 }

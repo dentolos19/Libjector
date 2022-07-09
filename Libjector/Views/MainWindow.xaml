@@ -66,9 +66,9 @@
                         <Setter Property="Margin" Value="0,1"/>
                     </Style>
                 </StackPanel.Resources>
-                <CheckBox x:Name="HideDllOption" IsEnabled="{Binding Path=IsInjectionMode}">Hide DLL From Process Environment Block (No Ejection Support)</CheckBox>
-                <CheckBox x:Name="RandomizeHeadersOption" IsEnabled="{Binding Path=IsInjectionMode}">Randomize DLL Headers</CheckBox>
-                <CheckBox x:Name="RandomizeNameOption" IsEnabled="{Binding Path=IsInjectionMode}">Randomize DLL Name</CheckBox>
+                <CheckBox IsEnabled="{Binding IsInjectionMode}" IsChecked="{Binding HideDllFlag}">Hide DLL From Process Environment Block (No Ejection Support)</CheckBox>
+                <CheckBox IsEnabled="{Binding IsInjectionMode}" IsChecked="{Binding RandomizeHeadersFlag}">Randomize DLL Headers</CheckBox>
+                <CheckBox IsEnabled="{Binding IsInjectionMode}" IsChecked="{Binding RandomizeNameFlag}">Randomize DLL Name</CheckBox>
             </StackPanel>
             <Button x:Name="InjectButton" Grid.Row="4" Click="OnInject">Inject</Button>
         </Grid>
