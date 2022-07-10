@@ -2,12 +2,10 @@
 
 A simple and easy-to-use DLL injector!
 
-This injector is powered by both [Lunar](https://github.com/Dewera/Lunar) (rewritten version of Bleak) and [Bleak](https://github.com/Akaion/Bleak) (deprecated version; still works).
-
 ## Features
 
 - [X] Supports WoW64 and x64 injection
-- [X] Supports multiple injection methods
+- [X] Supports multiple injection methods from [Bleak](https://github.com/Akaion/Bleak) and [Lunar](https://github.com/Dewera/Lunar)
   - [X] Create Thread: Creates a new thread in the process and uses it to load a DLL
   - [X] Hijack Thread: Hijacks an existing thread in the process and forces it to load a DLL
   - [X] Manual Map: Manually emulates part of the Windows loader to map the DLL into the process
