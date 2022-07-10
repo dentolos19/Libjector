@@ -10,14 +10,13 @@ A simple and easy-to-use DLL injector!
   - [X] Hijack Thread: Hijacks an existing thread in the process and forces it to load a DLL
   - [X] Manual Map: Manually emulates part of the Windows loader to map the DLL into the process
   - [X] Map Library (Lunar): An alternative injection method; maps DLL directly into memory
-- [X] Supports Bleak injection flags
+- [X] Supports injection and mapping flags
   - [X] Hide DLL from [Process Environment Block](https://wikipedia.org/wiki/Process_Environment_Block)
   - [X] Randomize DLL headers
   - [X] Randomize DLL name
-- [X] Supports Lunar mapping flags
-  - [X] Discard headers: Disables mapping of the DLL's header
-  - [X] Skip initialization routines: Disables calling of entry ponts of TLS callbacks
-- [X] Simplistic user interface for easy use (with [AdonisUI](https://github.com/benruehl/adonis-ui))
+  - [X] Discard headers (Lunar)
+  - [X] Skip initialization routines (Lunar)
+- [X] Simplistic user interface for easy use (with [Adonis UI](https://github.com/benruehl/adonis-ui))
 - [X] Able to determine the architecture of a process or a DLL
 
 ## Previews
