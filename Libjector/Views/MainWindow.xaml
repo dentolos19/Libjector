@@ -53,12 +53,29 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ComboBox x:Name="MethodSelection" Grid.Row="0" IsEnabled="{Binding InjectionMode}" SelectedIndex="0">
+            <ComboBox Grid.Row="0" IsEnabled="{Binding InjectionMode}" SelectedIndex="{Binding SelectedMethodIndex}">
                 <ComboBoxItem>Create Thread</ComboBoxItem>
                 <ComboBoxItem>Hijack Thread</ComboBoxItem>
                 <ComboBoxItem>Manual Map</ComboBoxItem>
+                <ComboBoxItem>Map Library (Lunar)</ComboBoxItem>
             </ComboBox>
             <StackPanel Grid.Row="2" Margin="0,-1">
+                <StackPanel.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedMethodIndex}" Value="0">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedMethodIndex}" Value="1">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedMethodIndex}" Value="2">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                    </Style>
+                </StackPanel.Style>
                 <StackPanel.Resources>
                     <Style TargetType="CheckBox">
                         <Setter Property="Margin" Value="0,1"/>
@@ -67,6 +84,25 @@
                 <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding HideDllFlag}">Hide DLL From Process Environment Block (No Ejection Support)</CheckBox>
                 <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding RandomizeHeadersFlag}">Randomize DLL Headers</CheckBox>
                 <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding RandomizeNameFlag}">Randomize DLL Name</CheckBox>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Margin="0,-1">
+                <StackPanel.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedMethodIndex}" Value="3">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                    </Style>
+                </StackPanel.Style>
+                <StackPanel.Resources>
+                    <Style TargetType="CheckBox">
+                        <Setter Property="Margin" Value="0,1"/>
+                    </Style>
+                </StackPanel.Resources>
+                <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding DiscardHeadersFlag}">Discard Headers</CheckBox>
+                <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding SkipInitializationRoutinesFlag}">Skip Initialization Routines</CheckBox>
             </StackPanel>
             <Button x:Name="InjectButton" Grid.Row="4" Click="OnInject">Inject</Button>
         </Grid>

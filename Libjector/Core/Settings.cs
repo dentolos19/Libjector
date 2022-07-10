@@ -14,19 +14,21 @@ public class Settings
     public bool IsHideDllFlagChecked { get; set; }
     public bool IsRandomizeHeadersFlagChecked { get; set; }
     public bool IsRandomizeNameFlagChecked { get; set; } = true;
+    public bool IsDiscardHeadersChecked { get; set; }
+    public bool IsSkipInitializationRoutinesChecked { get; set; }
 
     public void Save()
     {
-        var fileContent = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(FilePath, fileContent);
+        var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(FilePath, json);
     }
 
     public static Settings Load()
     {
         if (!File.Exists(FilePath))
             return new Settings();
-        var fileContent = File.ReadAllText(FilePath);
-        return JsonSerializer.Deserialize<Settings>(fileContent);
+        var json = File.ReadAllText(FilePath);
+        return JsonSerializer.Deserialize<Settings>(json);
     }
 
 }
