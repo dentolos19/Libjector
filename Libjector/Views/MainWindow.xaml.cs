@@ -188,7 +188,8 @@ public partial class MainWindow
                 };
                 _processHandler.RunWorkerAsync(); // runs until the dll is ejected or the target process is closed
                 ToggleInjectionMode(false);
-                InjectionCompleted: MessageBox.Show("The DLL has been injected into the process!", "Libjector");
+                InjectionCompleted:
+                MessageBox.Show("The DLL has been injected into the process!", "Libjector");
             }
             catch (Exception exception)
             {

@@ -33,7 +33,7 @@ public partial class SelectProcessWindow
         if (item is not ProcessItemModel processItem)
             return false; // filter item (hides it)
         return processItem.Id.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase) // checks process id
-            || processItem.Name.Contains(filter, StringComparison.OrdinalIgnoreCase); // checks process name
+               || processItem.Name.Contains(filter, StringComparison.OrdinalIgnoreCase); // checks process name
     }
 
     private void OnInitialized(object sender, EventArgs args)
