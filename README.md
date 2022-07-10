@@ -15,10 +15,11 @@ This injector is powered by [Bleak](https://github.com/Akaion/Bleak) which is by
   - [X] Hide DLL from [Process Environment Block](https://wikipedia.org/wiki/Process_Environment_Block)
   - [X] Randomize DLL headers
   - [X] Randomize DLL name
-- [X] Simplistic user interface for easy use
+- [X] Simplistic user interface for easy use (with [AdonisUI](https://github.com/benruehl/adonis-ui))
 - [X] Able to determine the architecture of a process or a DLL
 
-## Screenshots
+## Previews
 
-![](./.github/screenshots/0.png)
-![](./.github/screenshots/1.png)
+![](./.github/misc/preview0.gif)
+![](./.github/misc/preview1.png)
+![](./.github/misc/preview2.png)
