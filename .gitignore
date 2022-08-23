@@ -1,14 +1,16 @@
-# personalized gitignore for .NET
-
+# ide folders
 .vs/
 .idea/
 
+# build folders
 [Bb]in/
 [Oo]bj/
 
-*.suo
+# user files
 *.user
+*.suo
 
-Thumbs.db
-Desktop.ini
+# misc files
 .DS_Store
+Desktop.ini
+Thumbs.db

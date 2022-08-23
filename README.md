@@ -19,8 +19,8 @@ A simple and easy-to-use DLL injector!
 - [X] Simplistic user interface for easy use (with [Adonis UI](https://github.com/benruehl/adonis-ui))
 - [X] Able to determine the architecture of a process or a DLL
 
-## Previews
+## Images
 
-![](./.github/miscellaneous/preview0.gif)
-![](./.github/miscellaneous/preview1.png)
-![](./.github/miscellaneous/preview2.png)
+![](./.github/images/preview0.gif)
+![](./.github/images/preview1.png)
+![](./.github/images/preview2.png)

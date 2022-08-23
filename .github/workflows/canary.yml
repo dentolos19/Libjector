@@ -1,11 +1,11 @@
-name: Commitly Deployment Workflow
+name: Canary
 on:
   push:
     paths:
       - Libjector/**
   workflow_dispatch:
 env:
-  RELEASE_TAG: Commitly
+  RELEASE_TAG: Canary
 jobs:
   deploy:
     runs-on: windows-latest
@@ -21,13 +21,11 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Publish Project
-        run: dotnet publish --configuration Release --output build/
-      - name: Create Package
-        uses: vimtor/action-zip@v1
-        with:
-          files: build/
-          dest: ${{ github.event.repository.name }}.zip
-      - name: Delete Existing Tag
+        run: |
+          dotnet publish -c Release -o build
+          $artifacts = (Get-ChildItem -Recurse -Path build/*).FullName
+          Compress-Archive -Path $artifacts -DestinationPath ${{ github.event.repository.name }}.zip
+      - name: Delete (Existing) Release Tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,4 +38,4 @@ jobs:
           artifacts: ${{ github.event.repository.name }}.zip
           prerelease: true
           tag: ${{ env.RELEASE_TAG }}
-          commit: main
+          commit: ${{ github.event.repository.default_branch }}
