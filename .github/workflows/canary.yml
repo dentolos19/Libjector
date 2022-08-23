@@ -4,6 +4,9 @@ on:
     paths:
       - Libjector/**
   workflow_dispatch:
+concurrency:
+  group: release
+  cancel-in-progress: true
 env:
   RELEASE_TAG: Canary
 jobs:
