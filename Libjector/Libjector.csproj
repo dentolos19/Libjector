@@ -12,11 +12,23 @@
         <PackageReference Include="AdonisUI" Version="1.17.1"/>
         <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1"/>
         <PackageReference Include="Bleak" Version="3.1.1"/>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="7.1.2"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Lunar\Lunar\Lunar.csproj"/>
     </ItemGroup>
+
+    <!-- Should be removed after fixes on .NET 6.0.400 -->
+    <!-- https://github.com/dotnet/wpf/issues/6792 -->
+    <!-- Issue related to CommunityToolkit.Mvvm NuGet -->
+    <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())"/>
+            <Analyzer Remove="@(Analyzer)"/>
+            <Analyzer Include="@(FilteredAnalyzer)"/>
+        </ItemGroup>
+    </Target>
+
 
 </Project>
