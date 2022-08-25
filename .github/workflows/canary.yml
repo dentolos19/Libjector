@@ -10,7 +10,7 @@ concurrency:
 env:
   RELEASE_TAG: Canary
 jobs:
-  deploy:
+  main:
     runs-on: windows-latest
     permissions:
       contents: write
