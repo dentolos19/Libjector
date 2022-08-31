@@ -8,37 +8,70 @@ concurrency:
   group: release
   cancel-in-progress: true
 env:
+  PROJECT_FILE: Libjector/Libjector.csproj
   RELEASE_TAG: Canary
+  ARTIFACT_NAME: Canary
 jobs:
-  main:
+  build:
+    strategy:
+      matrix:
+        platform: [ x86, x64, arm, arm64 ]
+    continue-on-error: true
     runs-on: windows-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          submodules: true
+          submodules: recursive
+          lfs: true
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 6.0.x
       - name: Publish Project
         run: |
-          dotnet publish -c Release -o build
-          $artifacts = (Get-ChildItem -Recurse -Path build/*).FullName
-          Compress-Archive -Path $artifacts -DestinationPath ${{ github.event.repository.name }}.zip
+          dotnet publish ${{ env.PROJECT_FILE }} -c Release -p:RuntimeIdentifier=win-${{ matrix.platform }} -p:PublishSingleFile=true -p:SelfContained=false -o build
+          $artifact = (Get-ChildItem build/*.exe).FullName | Select-Object -First 1
+          New-Item -ItemType Directory artifacts
+          Move-Item $artifact artifacts/${{ github.event.repository.name }}_${{ matrix.platform }}.exe
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: artifacts
+  release:
+    needs: build
+    permissions:
+      contents: write
+    runs-on: windows-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: artifacts
+      - id: artifacts
+        name: Check Artifacts
+        run: |
+          $artifacts = (Get-ChildItem -Recurse -File artifacts).FullName
+          $artifactList = ""
+          foreach ($artifact in $artifacts) {
+            if ($artifactList.Length -gt 0) {
+              $artifactList += ","
+            }
+            $artifactList += $artifact
+          }
+          Write-Output "::set-output name=RELEASE_ARTIFACTS::$artifactList"
       - name: Delete (Existing) Release Tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.RELEASE_TAG }}
-          delete_release: true
-      - name: Deploy Release
+      - name: Release Artifacts
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ${{ github.event.repository.name }}.zip
+          artifacts: ${{ steps.artifacts.outputs.RELEASE_ARTIFACTS }}
           prerelease: true
           tag: ${{ env.RELEASE_TAG }}
           commit: ${{ github.event.repository.default_branch }}
