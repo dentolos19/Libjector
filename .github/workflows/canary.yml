@@ -8,20 +8,22 @@ concurrency:
   group: release
   cancel-in-progress: true
 env:
+  TARGET_BRANCH: ${{ github.event.repository.default_branch }}
   PROJECT_FILE: Libjector/Libjector.csproj
-  RELEASE_TAG: Canary
   ARTIFACT_NAME: Canary
+  RELEASE_TAG: Canary
 jobs:
   build:
     strategy:
       matrix:
-        platform: [ x86, x64, arm, arm64 ]
+        platform: [ x86, x64 ]
     continue-on-error: true
     runs-on: windows-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
+          ref: ${{ env.TARGET_BRANCH }}
           submodules: recursive
           lfs: true
       - name: Setup .NET
@@ -74,4 +76,4 @@ jobs:
           artifacts: ${{ steps.artifacts.outputs.RELEASE_ARTIFACTS }}
           prerelease: true
           tag: ${{ env.RELEASE_TAG }}
-          commit: ${{ github.event.repository.default_branch }}
+          commit: ${{ env.TARGET_BRANCH }}
