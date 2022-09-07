@@ -10,13 +10,13 @@ concurrency:
 env:
   TARGET_BRANCH: ${{ github.event.repository.default_branch }}
   PROJECT_FILE: Libjector/Libjector.csproj
-  ARTIFACT_NAME: Canary
+  ARTIFACT_NAME: Output
   RELEASE_TAG: Canary
 jobs:
   build:
     strategy:
       matrix:
-        platform: [ x86, x64, arm, arm64 ]
+        runtime: [ win-x86, win-x64, win-arm, win-arm64 ]
     continue-on-error: true
     runs-on: windows-latest
     steps:
@@ -32,10 +32,10 @@ jobs:
           dotnet-version: 6.0.x
       - name: Publish Project
         run: |
-          dotnet publish ${{ env.PROJECT_FILE }} -c Release -p:RuntimeIdentifier=win-${{ matrix.platform }} -p:PublishSingleFile=true -p:SelfContained=false -o build
-          $artifact = (Get-ChildItem build/*.exe).FullName | Select-Object -First 1
+          dotnet publish ${{ env.PROJECT_FILE }} -c Release -p:RuntimeIdentifier=${{ matrix.runtime }} -p:PublishSingleFile=true -p:SelfContained=false -o build
+          $artifacts = (Get-ChildItem build/*).FullName
           New-Item -ItemType Directory artifacts
-          Move-Item $artifact artifacts/${{ github.event.repository.name }}_${{ matrix.platform }}.exe
+          Compress-Archive $artifacts artifacts/${{ github.event.repository.name }}_${{ matrix.runtime }}.zip
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
