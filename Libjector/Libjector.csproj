@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0-windows</TargetFramework>
+        <TargetFramework>net7.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
@@ -18,17 +18,5 @@
     <ItemGroup>
         <ProjectReference Include="..\Lunar\Lunar\Lunar.csproj"/>
     </ItemGroup>
-
-    <!-- Should be removed after fixes on .NET 6.0.400 -->
-    <!-- https://github.com/dotnet/wpf/issues/6792 -->
-    <!-- Issue related to CommunityToolkit.Mvvm NuGet -->
-    <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
-        <ItemGroup>
-            <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())"/>
-            <Analyzer Remove="@(Analyzer)"/>
-            <Analyzer Include="@(FilteredAnalyzer)"/>
-        </ItemGroup>
-    </Target>
-
 
 </Project>
