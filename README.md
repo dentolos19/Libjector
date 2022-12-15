@@ -21,6 +21,6 @@ A simple and easy-to-use DLL injector!
 
 ## 📸 Screenshots
 
-![](.github/images/0.gif)
-![](.github/images/1.png)
-![](.github/images/2.png)
+![](.github/assets/0.gif)
+![](.github/assets/1.png)
+![](.github/assets/2.png)
