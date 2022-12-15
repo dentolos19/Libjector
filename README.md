@@ -1,8 +1,8 @@
-# <img src="./.github/icon.png" width="32"/> Libjector
+# <img src=".github/icon.png" width="48px"/> Libjector
 
 A simple and easy-to-use DLL injector!
 
-## Features
+## ⚙️ Features
 
 - [X] Supports WoW64 and x64 injection
 - [X] Supports multiple injection methods from [Bleak](https://github.com/Akaion/Bleak) and [Lunar](https://github.com/Dewera/Lunar)
@@ -19,8 +19,8 @@ A simple and easy-to-use DLL injector!
 - [X] Simplistic user interface for easy use (with [Adonis UI](https://github.com/benruehl/adonis-ui))
 - [X] Able to determine the architecture of a process or a DLL
 
-## Images
+## 📸 Screenshots
 
-![](./.github/images/preview0.gif)
-![](./.github/images/preview1.png)
-![](./.github/images/preview2.png)
+![](.github/images/0.gif)
+![](.github/images/1.png)
+![](.github/images/2.png)
