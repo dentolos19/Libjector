@@ -19,7 +19,6 @@ namespace Libjector;
 
 public partial class MainWindow
 {
-
     private int? _targetProcessId;
     private Injector? _injectorService; // api from Bleak
     private LibraryMapper? _libraryMapper; // api from Lunar
@@ -48,7 +47,7 @@ public partial class MainWindow
         Context.RandomizeHeadersFlag = App.Settings.IsRandomizeHeadersFlagChecked;
         Context.RandomizeNameFlag = App.Settings.IsRandomizeNameFlagChecked;
         Context.DiscardHeadersFlag = App.Settings.IsDiscardHeadersChecked;
-        Context.SkipInitializationRoutinesFlag = App.Settings.IsSkipInitializationRoutinesChecked;
+        // Context.SkipInitializationRoutinesFlag = App.Settings.IsSkipInitializationRoutinesChecked;
     }
 
     private void OnSelectProcess(object sender, RoutedEventArgs args)
@@ -136,8 +135,10 @@ public partial class MainWindow
                     var mappingFlags = MappingFlags.None;
                     if (Context.DiscardHeadersFlag)
                         mappingFlags |= MappingFlags.DiscardHeaders;
+                    /*
                     if (Context.SkipInitializationRoutinesFlag)
                         mappingFlags |= MappingFlags.SkipInitialisationRoutines;
+                    */
                     _libraryMapper = new LibraryMapper(Process.GetProcessById(_targetProcessId.Value), dllItem.Path, mappingFlags);
                     _libraryMapper.MapLibrary();
                 }
@@ -223,8 +224,7 @@ public partial class MainWindow
         App.Settings.IsRandomizeHeadersFlagChecked = Context.RandomizeHeadersFlag;
         App.Settings.IsRandomizeNameFlagChecked = Context.RandomizeNameFlag;
         App.Settings.IsDiscardHeadersChecked = Context.DiscardHeadersFlag;
-        App.Settings.IsSkipInitializationRoutinesChecked = Context.SkipInitializationRoutinesFlag;
+        // App.Settings.IsSkipInitializationRoutinesChecked = Context.SkipInitializationRoutinesFlag;
         App.Settings.DllPaths = Context.DllList.Select(libraryItem => libraryItem.Path).ToArray();
     }
-
 }

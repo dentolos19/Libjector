@@ -1,3 +1,6 @@
-[submodule "Lunar"]
-	path = Lunar
+[submodule "mods/Lunar"]
+	path = mods/Lunar
 	url = https://github.com/Dewera/Lunar.git
+[submodule "mods/Bleak"]
+	path = mods/Bleak
+	url = https://github.com/Akaion/Bleak.git

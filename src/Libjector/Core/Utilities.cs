@@ -8,10 +8,9 @@ namespace Libjector.Core;
 
 public static class Utilities
 {
-
     [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool IsWow64Process([In] IntPtr processHandle, [Out] [MarshalAs(UnmanagedType.Bool)] out bool wow64Process);
+    private static extern bool IsWow64Process([In] nint processHandle, [Out] [MarshalAs(UnmanagedType.Bool)] out bool wow64Process);
 
     public static Architecture? GetProcessArchitecture(Process process)
     {
@@ -50,5 +49,4 @@ public static class Utilities
     {
         Process.Start("explorer.exe", $"/select,\"{filePath}\"");
     }
-
 }

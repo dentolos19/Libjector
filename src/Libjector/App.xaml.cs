@@ -6,7 +6,6 @@ namespace Libjector;
 
 public partial class App
 {
-
     public static Settings Settings { get; } = Settings.Load();
 
     private void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs args)
@@ -19,5 +18,4 @@ public partial class App
     {
         Settings.Save();
     }
-
 }

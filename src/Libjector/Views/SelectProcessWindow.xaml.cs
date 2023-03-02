@@ -14,7 +14,6 @@ namespace Libjector.Views;
 
 public partial class SelectProcessWindow
 {
-
     public ObservableCollection<ProcessItemModel> Items { get; } = new();
 
     public KeyValuePair<int, string> Result { get; private set; }
@@ -41,7 +40,7 @@ public partial class SelectProcessWindow
         var processes = Process.GetProcesses();
         foreach (var process in processes)
         {
-            if (process.MainWindowHandle == IntPtr.Zero)
+            if (process.MainWindowHandle == nint.Zero)
                 continue; // continues the loop; if the process doesn't have a window or it is a background process
             Items.Add(new ProcessItemModel(process.Id, Path.GetFileName(process.MainModule?.FileName ?? "Unidentified Process"), Utilities.GetProcessArchitecture(process), process.MainModule?.FileName ?? string.Empty));
         }
@@ -72,5 +71,4 @@ public partial class SelectProcessWindow
         DialogResult = true;
         Close();
     }
-
 }

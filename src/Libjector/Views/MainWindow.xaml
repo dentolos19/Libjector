@@ -5,23 +5,23 @@
         xmlns:models="clr-namespace:Libjector.Models"
         Title="Libjector" Width="500" SizeToContent="Height" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Initialized="OnInitialized" Closing="OnClosing">
     <Window.DataContext>
-        <models:MainViewModel/>
+        <models:MainViewModel />
     </Window.DataContext>
     <StackPanel Margin="10,7.5">
         <Grid Margin="0,2.5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="ProcessInput" Grid.Column="0" extensions:WatermarkExtension.Watermark="Target Process" IsReadOnly="True"/>
+            <TextBox x:Name="ProcessInput" Grid.Column="0" extensions:WatermarkExtension.Watermark="Target Process" IsReadOnly="True" />
             <Button Grid.Column="2" IsEnabled="{Binding InjectionMode}" Click="OnSelectProcess">Select Process</Button>
         </Grid>
         <Grid Margin="0,2.5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" MinHeight="200"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" MinHeight="200" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <ListView x:Name="DllList" Grid.Row="0" IsEnabled="{Binding InjectionMode}" ItemsSource="{Binding Path=DllList}" AllowDrop="True" Drop="OnFileDrop" MouseDoubleClick="OnOpenDll">
                 <ListView.View>
@@ -34,11 +34,11 @@
             </ListView>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" IsEnabled="{Binding InjectionMode}" Click="OnAddDlls">Add DLL(s)</Button>
                 <Button Grid.Column="2" IsEnabled="{Binding InjectionMode}" Click="OnRemoveDll">Remove DLL</Button>
@@ -47,11 +47,11 @@
         </Grid>
         <Grid Margin="0,2.5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <ComboBox Grid.Row="0" IsEnabled="{Binding InjectionMode}" SelectedIndex="{Binding SelectedMethodIndex}">
                 <ComboBoxItem>Create Thread</ComboBoxItem>
@@ -64,21 +64,21 @@
                     <Style>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedMethodIndex}" Value="0">
-                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                <Setter Property="StackPanel.Visibility" Value="Visible" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedMethodIndex}" Value="1">
-                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                <Setter Property="StackPanel.Visibility" Value="Visible" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedMethodIndex}" Value="2">
-                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                <Setter Property="StackPanel.Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
-                        <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                        <Setter Property="StackPanel.Visibility" Value="Collapsed" />
                     </Style>
                 </StackPanel.Style>
                 <StackPanel.Resources>
                     <Style TargetType="CheckBox">
-                        <Setter Property="Margin" Value="0,1"/>
+                        <Setter Property="Margin" Value="0,1" />
                     </Style>
                 </StackPanel.Resources>
                 <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding HideDllFlag}">Hide DLL From Process Environment Block (No Ejection Support)</CheckBox>
@@ -90,19 +90,19 @@
                     <Style>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedMethodIndex}" Value="3">
-                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                <Setter Property="StackPanel.Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
-                        <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                        <Setter Property="StackPanel.Visibility" Value="Collapsed" />
                     </Style>
                 </StackPanel.Style>
                 <StackPanel.Resources>
                     <Style TargetType="CheckBox">
-                        <Setter Property="Margin" Value="0,1"/>
+                        <Setter Property="Margin" Value="0,1" />
                     </Style>
                 </StackPanel.Resources>
                 <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding DiscardHeadersFlag}">Discard Headers</CheckBox>
-                <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding SkipInitializationRoutinesFlag}">Skip Initialization Routines</CheckBox>
+                <!-- <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding SkipInitializationRoutinesFlag}">Skip Initialization Routines</CheckBox> -->
             </StackPanel>
             <Button x:Name="InjectButton" Grid.Row="4" Click="OnInject">Inject</Button>
         </Grid>

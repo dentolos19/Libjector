@@ -6,7 +6,6 @@ namespace Libjector.Core;
 
 public class Settings
 {
-
     private static readonly string FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libjector.settings.json");
 
     public string[] DllPaths { get; set; } = Array.Empty<string>();
@@ -15,7 +14,7 @@ public class Settings
     public bool IsRandomizeHeadersFlagChecked { get; set; }
     public bool IsRandomizeNameFlagChecked { get; set; } = true;
     public bool IsDiscardHeadersChecked { get; set; }
-    public bool IsSkipInitializationRoutinesChecked { get; set; }
+    // public bool IsSkipInitializationRoutinesChecked { get; set; }
 
     public void Save()
     {
@@ -30,5 +29,4 @@ public class Settings
         var json = File.ReadAllText(FilePath);
         return JsonSerializer.Deserialize<Settings>(json);
     }
-
 }

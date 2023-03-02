@@ -6,13 +6,13 @@
         Title="Select Process" Width="300" SizeToContent="Height" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Initialized="OnInitialized">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="*" MinHeight="200"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="*" MinHeight="200" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBox x:Name="FilterInput" Grid.Row="0" extensions:WatermarkExtension.Watermark="Search" TextChanged="OnProcessFilter"/>
+        <TextBox x:Name="FilterInput" Grid.Row="0" extensions:WatermarkExtension.Watermark="Search" TextChanged="OnProcessFilter" />
         <ListView x:Name="ProcessList" Grid.Row="2" ItemsSource="{Binding Items}" SelectionChanged="OnProcessSelect" MouseDoubleClick="OnProcessSelected">
             <ListView.View>
                 <GridView>
@@ -25,11 +25,11 @@
         </ListView>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="ProcessInput" Grid.Column="0" IsReadOnly="True"/>
+            <TextBox x:Name="ProcessInput" Grid.Column="0" IsReadOnly="True" />
             <Button Grid.Column="2" Click="OnContinue">Continue</Button>
         </Grid>
     </Grid>
