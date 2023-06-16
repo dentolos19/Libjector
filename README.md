@@ -1,11 +1,16 @@
-# <img src="docs/icon.png" width="48px"/> Libjector
+<h1>
+    <img src="docs/icon.png" style="height: 1em;"/>
+    <span>Libjector</span>
+</h1>
 
 A simple and easy-to-use DLL injector!
 
 ## ⚙️ Features
 
+> **Note**: Most of this feature set has been made possible with [Bleak](https://nuget.org/packages/Bleak) and [Lunar](https://github.com/Dewera/Lunar)!
+
 - [x] Supports WoW64 and x64 injection
-- [x] Supports multiple injection methods from [Bleak](https://github.com/Akaion/Bleak) and [Lunar](https://github.com/Dewera/Lunar)
+- [x] Supports multiple injection methods
   - [x] Create Thread: Creates a new thread in the process and uses it to load a DLL
   - [x] Hijack Thread: Hijacks an existing thread in the process and forces it to load a DLL
   - [x] Manual Map: Manually emulates part of the Windows loader to map the DLL into the process
