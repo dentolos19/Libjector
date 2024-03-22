@@ -1,4 +1,4 @@
-﻿<Window x:Class="Libjector.MainWindow"
+﻿<Window x:Class="Libjector.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
@@ -102,7 +102,7 @@
                     </Style>
                 </StackPanel.Resources>
                 <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding DiscardHeadersFlag}">Discard Headers</CheckBox>
-                <!-- <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding SkipInitializationRoutinesFlag}">Skip Initialization Routines</CheckBox> -->
+                <CheckBox IsEnabled="{Binding InjectionMode}" IsChecked="{Binding SkipInitializationRoutinesFlag}">Skip Initialization Routines</CheckBox>
             </StackPanel>
             <Button x:Name="InjectButton" Grid.Row="4" Click="OnInject">Inject</Button>
         </Grid>

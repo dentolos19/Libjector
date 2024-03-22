@@ -26,11 +26,11 @@ public partial class SelectProcessWindow
     {
         var filter = FilterInput.Text;
         if (string.IsNullOrEmpty(filter))
-            return true; // does not filter item (keeps it)
+            return true; // Does not filter item (keeps it)
         if (item is not ProcessItemModel processItem)
-            return false; // filter item (hides it)
-        return processItem.Id.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase) // checks process id
-               || processItem.Name.Contains(filter, StringComparison.OrdinalIgnoreCase); // checks process name
+            return false; // Filter item (hides it)
+        return processItem.Id.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase) // Checks process ID
+               || processItem.Name.Contains(filter, StringComparison.OrdinalIgnoreCase); // Checks process name
     }
 
     private void OnInitialized(object sender, EventArgs args)
@@ -39,7 +39,7 @@ public partial class SelectProcessWindow
         foreach (var process in processes)
         {
             if (process.MainWindowHandle == nint.Zero)
-                continue; // continues the loop; if the process doesn't have a window or it is a background process
+                continue; // Continues the loop; if the process doesn't have a window or it is a background process
             Items.Add(new ProcessItemModel(process.Id, Path.GetFileName(process.MainModule?.FileName ?? "Unidentified Process"), Utilities.GetProcessArchitecture(process), process.MainModule?.FileName ?? string.Empty));
         }
     }
@@ -58,7 +58,7 @@ public partial class SelectProcessWindow
     private void OnProcessSelected(object sender, MouseButtonEventArgs args)
     {
         if (ProcessList.SelectedItem is ProcessItemModel)
-            OnContinue(null, null);
+            OnContinue(null!, null!);
     }
 
     private void OnContinue(object sender, RoutedEventArgs args)

@@ -13,11 +13,11 @@
         <PackageReference Include="AdonisUI" Version="1.17.1" />
         <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
         <PackageReference Include="Bleak" Version="3.1.1" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Lunar\src\Lunar\Lunar.csproj" />
+        <ProjectReference Include="..\Lunar\src\Lunar\Lunar.csproj" />
     </ItemGroup>
 
 </Project>

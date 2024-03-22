@@ -6,20 +6,19 @@ using System.Windows.Input;
 using Bleak;
 using Libjector.Core;
 using Libjector.Models;
-using Libjector.Views;
 using Lunar;
 using Microsoft.Win32;
 using MessageBox = AdonisUI.Controls.MessageBox;
 using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
-namespace Libjector;
+namespace Libjector.Views;
 
 public partial class MainWindow
 {
     private int? _targetProcessId;
-    private Injector? _injectorService; // api from Bleak
-    private LibraryMapper? _libraryMapper; // api from Lunar
+    private Injector? _injectorService; // API from Bleak
+    private LibraryMapper? _libraryMapper; // API from Lunar
     private BackgroundWorker? _processHandler;
 
     private MainViewModel Context => (MainViewModel)DataContext;
@@ -45,7 +44,7 @@ public partial class MainWindow
         Context.RandomizeHeadersFlag = App.Settings.IsRandomizeHeadersFlagChecked;
         Context.RandomizeNameFlag = App.Settings.IsRandomizeNameFlagChecked;
         Context.DiscardHeadersFlag = App.Settings.IsDiscardHeadersChecked;
-        // Context.SkipInitializationRoutinesFlag = App.Settings.IsSkipInitializationRoutinesChecked;
+        Context.SkipInitializationRoutinesFlag = App.Settings.IsSkipInitializationRoutinesChecked;
     }
 
     private void OnSelectProcess(object sender, RoutedEventArgs args)
@@ -61,7 +60,9 @@ public partial class MainWindow
     {
         if (!args.Data.GetDataPresent(DataFormats.FileDrop))
             return;
-        var filePaths = (string[])args.Data.GetData(DataFormats.FileDrop);
+        var filePaths = (string[]?)args.Data.GetData(DataFormats.FileDrop);
+        if (filePaths is not { Length: > 0 })
+            return;
         foreach (var filePath in filePaths)
         {
             if (!Path.GetExtension(filePath).Equals(".dll", StringComparison.OrdinalIgnoreCase))
@@ -111,17 +112,17 @@ public partial class MainWindow
     {
         if (Context.InjectionMode)
         {
-            if (!Utilities.IsRunningAsAdministrator()) // checks whether the app is running as administrator
+            if (!Utilities.IsRunningAsAdministrator()) // Checks whether the app is running as administrator
             {
                 MessageBox.Show("Administrative privileges is required in order to inject a DLL into a process!", "Libjector");
                 return;
             }
-            if (_targetProcessId is null) // checks whether the target process is selected yet
+            if (_targetProcessId is null) // Checks whether the target process is selected yet
             {
                 MessageBox.Show("Select a target process before continuing!", "Libjector");
                 return;
             }
-            if (DllList.SelectedItem is not DllItemModel dllItem) // checks whether the dll is selected yet
+            if (DllList.SelectedItem is not DllItemModel dllItem) // Checks whether the dll is selected yet
             {
                 MessageBox.Show("Select a DLL before continuing!", "Libjector");
                 return;
@@ -133,21 +134,19 @@ public partial class MainWindow
                     var mappingFlags = MappingFlags.None;
                     if (Context.DiscardHeadersFlag)
                         mappingFlags |= MappingFlags.DiscardHeaders;
-                    /*
                     if (Context.SkipInitializationRoutinesFlag)
-                        mappingFlags |= MappingFlags.SkipInitialisationRoutines;
-                    */
+                        mappingFlags |= MappingFlags.SkipInitRoutines;
                     _libraryMapper = new LibraryMapper(Process.GetProcessById(_targetProcessId.Value), dllItem.Path, mappingFlags);
                     _libraryMapper.MapLibrary();
                 }
                 else
                 {
                     var injectionFlags = InjectionFlags.None;
-                    if (Context.HideDllFlag) // adds hide from peb flag
+                    if (Context.HideDllFlag) // Adds hide from peb flag
                         injectionFlags |= InjectionFlags.HideDllFromPeb;
-                    if (Context.RandomizeHeadersFlag) // adds randomize headers flag
+                    if (Context.RandomizeHeadersFlag) // Adds randomize headers flag
                         injectionFlags |= InjectionFlags.RandomiseDllHeaders;
-                    if (Context.RandomizeNameFlag) // adds randomize name flag
+                    if (Context.RandomizeNameFlag) // Adds randomize name flag
                         injectionFlags |= InjectionFlags.RandomiseDllName;
                     var injectionMethod = Context.SelectedMethodIndex switch
                     {
@@ -155,37 +154,37 @@ public partial class MainWindow
                         2 => InjectionMethod.ManualMap,
                         _ => InjectionMethod.CreateThread
                     };
-                    _injectorService?.Dispose(); // disposes any existing injector service
+                    _injectorService?.Dispose(); // Disposes any existing injector service
                     _injectorService = new Injector(_targetProcessId.Value, dllItem.Path, injectionMethod, injectionFlags);
-                    _injectorService.InjectDll(); // injects dll into the target process
+                    _injectorService.InjectDll(); // Injects dll into the target process
                     if (injectionFlags.HasFlag(InjectionFlags.HideDllFromPeb))
                     {
-                        _injectorService.Dispose(); // disposes the injector service; if the specific flag is used
+                        _injectorService.Dispose(); // Disposes the injector service; if the specific flag is used
                         goto InjectionCompleted;
                     }
                 }
-                _processHandler?.Dispose(); // disposes any existing process handler
+                _processHandler?.Dispose(); // Disposes any existing process handler
                 _processHandler = new BackgroundWorker { WorkerSupportsCancellation = true };
                 _processHandler.DoWork += delegate
                 {
                     try
                     {
                         using var process = Process.GetProcessById(_targetProcessId.Value);
-                        process.WaitForExit(); // waits for the target process to exit
+                        process.WaitForExit(); // Waits for the target process to exit
                     }
                     catch
                     {
-                        // do nothing
+                        // Do nothing
                     }
                 };
                 _processHandler.RunWorkerCompleted += delegate
                 {
-                    // disposes any existing services; as the target process has been closed
+                    // Disposes any existing services; as the target process has been closed
                     _injectorService?.Dispose();
                     _libraryMapper?.UnmapLibrary();
                     ToggleInjectionMode(true);
                 };
-                _processHandler.RunWorkerAsync(); // runs until the dll is ejected or the target process is closed
+                _processHandler.RunWorkerAsync(); // Runs until the dll is ejected or the target process is closed
                 ToggleInjectionMode(false);
                 InjectionCompleted:
                 MessageBox.Show("The DLL has been injected into the process!", "Libjector");
@@ -208,7 +207,7 @@ public partial class MainWindow
                 MessageBox.Show("An error occurred while ejecting! " + exception.Message, "Libjector");
             }
             if (_processHandler?.IsBusy == true)
-                _processHandler?.CancelAsync(); // cancels the process handler; as the dll has been ejected
+                _processHandler?.CancelAsync(); // Cancels the process handler; as the dll has been ejected
             _processHandler?.Dispose();
             ToggleInjectionMode(true);
             MessageBox.Show("The DLL has been ejected from the process!", "Libjector");
@@ -222,7 +221,7 @@ public partial class MainWindow
         App.Settings.IsRandomizeHeadersFlagChecked = Context.RandomizeHeadersFlag;
         App.Settings.IsRandomizeNameFlagChecked = Context.RandomizeNameFlag;
         App.Settings.IsDiscardHeadersChecked = Context.DiscardHeadersFlag;
-        // App.Settings.IsSkipInitializationRoutinesChecked = Context.SkipInitializationRoutinesFlag;
+        App.Settings.IsSkipInitializationRoutinesChecked = Context.SkipInitializationRoutinesFlag;
         App.Settings.DllPaths = Context.DllList.Select(libraryItem => libraryItem.Path).ToArray();
     }
 }
