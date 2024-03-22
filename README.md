@@ -1,13 +1,17 @@
 <h1>
-    <img src="docs/icon.png" alt="Icon" height="30"/>
+    <img src="docs/icon.png" alt="Icon" height="30">
     <span>Libjector</span>
 </h1>
 
+> **Note**: This project is no longer being actively developed. Commits only adds maintainance updates.
+
 A simple and easy-to-use DLL injector!
+
+![Demo](docs/demo.gif)
 
 ## ⚙️ Features
 
-> **Note**: Most of this feature set has been made possible with [Bleak](https://nuget.org/packages/Bleak) and [Lunar](https://github.com/Dewera/Lunar)!
+> **Note**: Most of this feature set has been made possible with [Bleak](https://nuget.org/packages/Bleak) and [Lunar](https://github.com/jdewera/lunar)!
 
 - [x] Supports WoW64 and x64 injection
 - [x] Supports multiple injection methods
@@ -24,8 +28,10 @@ A simple and easy-to-use DLL injector!
 - [x] Simplistic user interface for easy use (with [Adonis UI](https://github.com/benruehl/adonis-ui))
 - [x] Able to determine the architecture of a process or a DLL
 
-## 📸 Screenshots
+## 💖 Credits
 
-![](docs/0.gif)
-![](docs/1.png)
-![](docs/2.png)
+- Icon by [okta](https://flaticon.com/free-icon/injection_12115133)
+
+## 📜 License
+
+Distributed under the MIT License. See [LICENSE](./LICENSE) for more information.
