@@ -1,5 +1,5 @@
 <h1>
-    <img src="docs/icon.png" style="height: 1em;"/>
+    <img src="docs/icon.png" alt="Icon" height="30"/>
     <span>Libjector</span>
 </h1>
 

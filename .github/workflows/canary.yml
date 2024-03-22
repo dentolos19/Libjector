@@ -1,7 +1,8 @@
-name: Canary Deployment
+name: Deploy Canary Build
 run-name: "${{ github.workflow }} #${{ github.run_number }}"
 on:
   push:
+    branches: main
     paths:
       - src/**
   workflow_dispatch:
@@ -10,51 +11,36 @@ concurrency:
   cancel-in-progress: true
 env:
   PROJECT_FILE: Libjector.sln
-  RELEASE_TAG: Canary
+  RELEASE_TITLE: Canary Build
+  RELEASE_TAG: canary
 jobs:
   build:
-    name: Build
     runs-on: windows-latest
     steps:
-      - name: Checkout Branch
-        uses: actions/checkout@v3
-        with:
-          lfs: true
-          submodules: recursive
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v2
-      - name: Publish Project
-        run: |
-          dotnet publish ${{ env.PROJECT_FILE }} --configuration Release --output build
-          $artifacts = (Get-ChildItem -Path build/*).FullName
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+      - run: |
+          dotnet publish ${{ env.PROJECT_FILE }} --output build
+          $artifacts = (Get-ChildItem -Path build -Recurse).FullName
           New-Item -Path artifacts -ItemType Directory
           Compress-Archive -Path $artifacts -DestinationPath artifacts/${{ github.event.repository.name }}.zip
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: Output
-          path: artifacts
+          name: output
+          path: artifacts/*
   deploy:
-    name: Deploy
-    needs: build
     runs-on: ubuntu-latest
+    needs: build
     permissions:
       contents: write
     steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: Output
           path: artifacts
-      - name: Delete (Existing) Releases
-        uses: dev-drprasad/delete-tag-and-release@v1.0
+          merge-multiple: true
+      - uses: marvinpinto/action-automatic-releases@latest
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ env.RELEASE_TAG }}
-          delete_release: true
-      - name: Release Artifacts
-        uses: softprops/action-gh-release@v0.1.15
-        with:
-          tag_name: ${{ env.RELEASE_TAG }}
-          prerelease: true
           files: artifacts/*
+          title: ${{ env.RELEASE_TITLE }}
+          automatic_release_tag: ${{ env.RELEASE_TAG }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
