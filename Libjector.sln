@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Libjector", "src\Libjector\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project References", "Project References", "{A5B4FC03-4E80-49D7-BD26-D6AB2EA29586}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunar", "src\Lunar\src\Lunar\Lunar.csproj", "{18E59B00-69D7-4A7D-93A8-31D88D5C98F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,11 +25,16 @@ Global
 		{81435D18-76BF-4F60-89A0-F42627BDFBD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81435D18-76BF-4F60-89A0-F42627BDFBD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81435D18-76BF-4F60-89A0-F42627BDFBD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18E59B00-69D7-4A7D-93A8-31D88D5C98F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18E59B00-69D7-4A7D-93A8-31D88D5C98F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18E59B00-69D7-4A7D-93A8-31D88D5C98F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18E59B00-69D7-4A7D-93A8-31D88D5C98F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{18E59B00-69D7-4A7D-93A8-31D88D5C98F2} = {A5B4FC03-4E80-49D7-BD26-D6AB2EA29586}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AB32012C-2291-4BFB-A580-03FBDEF5F0F7}

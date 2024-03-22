@@ -1,0 +1,3 @@
+[submodule "src/Lunar"]
+	path = src/Lunar
+	url = https://github.com/jdewera/lunar.git

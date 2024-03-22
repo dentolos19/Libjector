@@ -16,4 +16,8 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Lunar\src\Lunar\Lunar.csproj" />
+    </ItemGroup>
+
 </Project>
