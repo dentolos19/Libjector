@@ -1,16 +1,16 @@
-# environment files
+# IDE configurations
 .vs/
 .idea/
 
-# output files
-bin/
-obj/
+# Output files
+[Bb]in/
+[Oo]bj/
 
-# user files
+# User-specific files
 *.user
 *.suo
 
-# miscellaneous files
+# Miscellaneous files
 .DS_Store
 Desktop.ini
 Thumbs.db
