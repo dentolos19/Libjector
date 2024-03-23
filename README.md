@@ -3,8 +3,6 @@
     <span>Libjector</span>
 </h1>
 
-> **Note**: This project is no longer being actively developed. Commits only adds maintainance updates.
-
 A simple and easy-to-use DLL injector!
 
 ![Demo](docs/demo.gif)
